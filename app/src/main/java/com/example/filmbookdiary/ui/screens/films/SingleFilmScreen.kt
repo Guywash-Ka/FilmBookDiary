@@ -14,10 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.FilmData
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun SingleFilmScreen(
-    filmType: String? = FilmData.films.first().name,
+    filmType: String? = FilmData.getFilmsNotFlow().first().name,
     modifier: Modifier = Modifier
 ) {
     val film = remember(filmType) {

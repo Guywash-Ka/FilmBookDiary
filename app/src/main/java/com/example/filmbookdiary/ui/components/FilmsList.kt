@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.data.FilmData
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun FilmPage(
@@ -84,15 +86,15 @@ fun FilmList(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun FilmListPreview(
-    modifier: Modifier = Modifier,
-    items: List<Film> = FilmData.films
-) {
-    FilmList(
-        modifier = modifier,
-        films = items,
-        onFilmClicked = { /* TODO */ }
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun FilmListPreview(
+//    modifier: Modifier = Modifier,
+//    items: List<Film> = FilmData.getFilms()
+//) {
+//    FilmList(
+//        modifier = modifier,
+//        films = items,
+//        onFilmClicked = { /* TODO */ }
+//    )
+//}

@@ -1,9 +1,11 @@
 package com.example.filmbookdiary.data
 
 import com.example.filmbookdiary.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 object FilmData {
-    val films: List<Film> = listOf(
+    private val films: MutableList<Film> = mutableListOf(
         Film(
             R.drawable.drive_photo,
             "Drive",
@@ -26,9 +28,16 @@ object FilmData {
         )
     )
 
-    fun getFilm(filmName: String?): Film {
-        return films.first{ it.name == filmName }
-    }
+    fun getFilms(): Flow<List<Film>> = MutableStateFlow(films)
+
+    fun getFilmsNotFlow(): List<Film> = films
+
+    fun getFilm(filmName: String?): Film = films.first{ it.name == filmName }
+
+    fun addFilm(film: Film) = films.add(film)
+
+    fun deleteFilm(film: Film) = films.remove(film)
+
 }
 
 data class Film(
