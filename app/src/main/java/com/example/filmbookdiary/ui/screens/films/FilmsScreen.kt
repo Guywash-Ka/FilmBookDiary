@@ -45,47 +45,5 @@ fun FilmsScreen(
         ) {
             Icon(Icons.Filled.Add, "Add new element")
         }
-
-        RequestContentPermission(modifier.align(alignment = Alignment.BottomCenter))
-    }
-}
-
-@Preview
-@Composable
-fun RequestContentPermission(modifier: Modifier = Modifier) {
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val context = LocalContext.current
-    val bitmap =  remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-
-    val launcher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
-    }
-    Column() {
-        Button(onClick = {
-            launcher.launch("image/*")
-        }) {
-            Text(text = "Pick image")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        imageUri?.let {
-            val source = ImageDecoder
-                .createSource(context.contentResolver,it)
-            bitmap.value = ImageDecoder.decodeBitmap(source)
-
-            bitmap.value?.let {  btm ->
-                Image(bitmap = btm.asImageBitmap(),
-                    contentDescription =null,
-                    modifier = Modifier.size(400.dp))
-                Text(text = it.toString())
-            }
-        }
-
     }
 }

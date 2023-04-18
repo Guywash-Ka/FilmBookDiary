@@ -1,9 +1,6 @@
 package com.example.filmbookdiary.ui.components
 
-import android.content.res.Resources
-import android.graphics.ImageDecoder
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,22 +12,12 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.Film
-import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-
 
 @Composable
 fun FilmPage(
@@ -46,12 +33,6 @@ fun FilmPage(
         modifier = modifier.clickable { onFilmClicked(filmName) }
     ) {
         Column(modifier = modifier.background(color = colors.primary)) {
-//            Image(
-//                modifier = modifier.fillMaxWidth(1f),
-//                painter = painterResource(filmImageId),
-//                contentDescription = "Film Photo",
-//                contentScale = ContentScale.FillWidth
-//            )
             GlideImage(
                 imageModel = { filmImageUri },
                 modifier = modifier.height(280.dp)
@@ -70,8 +51,7 @@ fun FilmPage(
                 text = filmDescription,
                 color = colors.onPrimary,
                 maxLines = 2,
-//                overflow = TextOverflow.Ellipsis
-                overflow = TextOverflow.Clip
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -97,16 +77,3 @@ fun FilmList(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun FilmListPreview(
-//    modifier: Modifier = Modifier,
-//    items: List<Film> = FilmData.getFilms()
-//) {
-//    FilmList(
-//        modifier = modifier,
-//        films = items,
-//        onFilmClicked = { /* TODO */ }
-//    )
-//}

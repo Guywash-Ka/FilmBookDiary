@@ -1,25 +1,35 @@
 package com.example.filmbookdiary.repositories
 
 import android.content.Context
+import androidx.room.Room
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.data.FilmData
+import com.example.filmbookdiary.database.FilmDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
+
+private const val DATABASE_NAME = "FBDiary_db"
 
 class FilmRepository private constructor(
     context: Context,
     private val coroutineScope: CoroutineScope = GlobalScope
 ){
-    private val database: FilmData = FilmData
+    private val database: FilmDatabase = Room
+        .databaseBuilder(
+            context.applicationContext,
+            FilmDatabase::class.java,
+            DATABASE_NAME
+        )
+        .build()
 
-    fun getFilms(): Flow<List<Film>> = database.getFilms()
+    fun getFilms(): Flow<List<Film>> = database.filmDao().getFilms()
 
-    suspend fun getFilm(name: String): Film = database.getFilm(name)
+    suspend fun getFilm(id: UUID): Film = database.filmDao().getFilm(id)
 
-    suspend fun addFilm(film: Film) = database.addFilm(film)
+    suspend fun addFilm(film: Film) = database.filmDao().addFilm(film)
 
-    suspend fun removeFilm(film: Film) = database.deleteFilm(film)
+    suspend fun removeFilm(film: Film) = database.filmDao().removeFilm(film)
 
     companion object {
         private var INSTANCE: FilmRepository? = null
@@ -31,7 +41,7 @@ class FilmRepository private constructor(
         }
 
         fun get(): FilmRepository {
-            return INSTANCE ?: throw java.lang.IllegalStateException("Film repository must be initialized")
+            return INSTANCE ?: throw java.lang.IllegalStateException("FilmRepository must be initialized")
         }
     }
 }

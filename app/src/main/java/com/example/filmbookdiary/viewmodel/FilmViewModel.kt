@@ -4,7 +4,6 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.data.FilmData
 import com.example.filmbookdiary.repositories.FilmRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -10,28 +10,23 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.data.FilmData
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.flow.first
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import java.util.*
 
 @Composable
 fun SingleFilmScreen(
-    filmType: String? = "", //TODO(возвращает просто список, а не флоу, так делать не стоит)
+    filmType: String? = "",
     modifier: Modifier = Modifier,
 ) {
     val film = remember(filmType) {
-        FilmData.getFilm(filmType)
+        Film(UUID(123, 2), Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.drive_photo), "Drive", "Very cool film")
     }
 
     var imageUri by remember {
@@ -44,15 +39,8 @@ fun SingleFilmScreen(
     }
 
     Column(modifier = modifier.verticalScroll(enabled = true, state = ScrollState(0))) {
-//        Image(
-//            modifier = modifier.fillMaxWidth(1f),
-//            painter = painterResource(film.imageId),
-//            contentDescription = "Film Photo",
-//            contentScale = ContentScale.FillWidth
-//        )
         GlideImage(
             imageModel = { imageUri ?: film.imageUri},
-            // Crop, Fit, Inside, FillHeight, FillWidth, None
             modifier = modifier.height(420.dp),
             imageOptions = ImageOptions(
                 contentScale = ContentScale.Crop
