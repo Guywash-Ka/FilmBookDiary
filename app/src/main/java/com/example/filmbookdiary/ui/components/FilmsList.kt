@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,10 +54,7 @@ fun FilmPage(
 //            )
             GlideImage(
                 imageModel = { filmImageUri },
-                // Crop, Fit, Inside, FillHeight, FillWidth, None
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.FillWidth
-                )
+                modifier = modifier.height(280.dp)
             )
             Text(
                 modifier = modifier.padding(start = 8.dp),
