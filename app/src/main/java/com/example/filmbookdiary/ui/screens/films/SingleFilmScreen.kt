@@ -15,19 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.filmbookdiary.R
-import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.viewmodel.FilmViewModel
 import com.example.filmbookdiary.viewmodel.SingFilmViewModelFactory
 import com.example.filmbookdiary.viewmodel.SingleFilmViewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import java.lang.reflect.Array.getInt
 import java.util.*
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -37,13 +29,6 @@ fun SingleFilmScreen(
     modifier: Modifier = Modifier,
     singleFilmViewModel: SingleFilmViewModel = viewModel(factory = SingFilmViewModelFactory(UUID.fromString(filmID))),
 ) {
-//    val film = remember(filmID) {
-//        Film(UUID(123, 2), Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.drive_photo), "Drive", "Very cool film") //TODO(получать фильм через UUID)
-//        singleFilmViewModel.viewModelScope.launch {
-//            singleFilmViewModel.getFilm(UUID.fromString(filmID))
-//        }
-//    }
-
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
@@ -57,6 +42,9 @@ fun SingleFilmScreen(
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(imageUri = imageUri!!)
+        }
     }
 
     Column(modifier = modifier.verticalScroll(enabled = true, state = ScrollState(0))) {
@@ -83,10 +71,6 @@ fun SingleFilmScreen(
         }
         Button(onClick = { launcher.launch("image/*") }) {
             Text(text = "Change image")
-        }
-
-        imageUri?.let {
-            singleFilmViewModel.film.value?.imageUri = imageUri as Uri
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.example.filmbookdiary.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.filmbookdiary.data.Film
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -25,5 +22,8 @@ interface FilmDao {
 
     @Query("DELETE FROM films")
     suspend fun removeAllFilms()
+
+    @Update
+    suspend fun updateFilm(film: Film)
 
 }

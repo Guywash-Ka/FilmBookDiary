@@ -7,6 +7,7 @@ import com.example.filmbookdiary.database.FilmDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 private const val DATABASE_NAME = "FBDiary_db"
@@ -32,6 +33,12 @@ class FilmRepository private constructor(
     suspend fun removeFilm(film: Film) = database.filmDao().removeFilm(film)
 
     suspend fun removeAllFilms() = database.filmDao().removeAllFilms()
+
+    fun updateFilm(film: Film) {
+        coroutineScope.launch {
+            database.filmDao().updateFilm(film)
+        }
+    }
 
     companion object {
         private var INSTANCE: FilmRepository? = null
