@@ -1,5 +1,8 @@
 package com.example.filmbookdiary.ui.components
 
+import android.content.res.Resources
+import android.graphics.ImageDecoder
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,20 +17,24 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.data.FilmData
-import kotlinx.coroutines.flow.Flow
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.glide.GlideImage
+
 
 @Composable
 fun FilmPage(
     modifier: Modifier = Modifier,
-    filmImageId: Int,
+    filmImageUri: Uri,
     filmName: String,
     filmDescription: String,
     onFilmClicked: (String) -> Unit
@@ -38,11 +45,18 @@ fun FilmPage(
         modifier = modifier.clickable { onFilmClicked(filmName) }
     ) {
         Column(modifier = modifier.background(color = colors.primary)) {
-            Image(
-                modifier = modifier.fillMaxWidth(1f),
-                painter = painterResource(filmImageId),
-                contentDescription = "Film Photo",
-                contentScale = ContentScale.FillWidth
+//            Image(
+//                modifier = modifier.fillMaxWidth(1f),
+//                painter = painterResource(filmImageId),
+//                contentDescription = "Film Photo",
+//                contentScale = ContentScale.FillWidth
+//            )
+            GlideImage(
+                imageModel = { filmImageUri },
+                // Crop, Fit, Inside, FillHeight, FillWidth, None
+                imageOptions = ImageOptions(
+                    contentScale = ContentScale.FillWidth
+                )
             )
             Text(
                 modifier = modifier.padding(start = 8.dp),
@@ -76,7 +90,7 @@ fun FilmList(
             items = films,
             itemContent = {
                 FilmPage(
-                    filmImageId = it.imageId,
+                    filmImageUri = it.imageUri,
                     filmName = it.name,
                     filmDescription = it.description,
                     onFilmClicked = onFilmClicked
