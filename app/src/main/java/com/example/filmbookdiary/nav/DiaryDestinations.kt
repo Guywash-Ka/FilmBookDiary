@@ -35,10 +35,10 @@ object SingleFilm: DiaryDestination {
     override val icon: ImageVector
         get() = TODO("Not yet implemented")//=
     override val route = "singleFilm"
-    const val filmTypeArg = "film_type"
-    val routeWithArgs = "${route}/{${filmTypeArg}}"
+    const val filmIDArg = "film_id"
+    val routeWithArgs = "${route}/{${filmIDArg}}"
     val arguments = listOf(
-        navArgument(filmTypeArg) { type = NavType.StringType }
+        navArgument(filmIDArg) { type = NavType.StringType }
     )
 }
 

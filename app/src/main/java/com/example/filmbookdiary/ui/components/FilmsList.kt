@@ -18,19 +18,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.Film
 import com.skydoves.landscapist.glide.GlideImage
+import java.util.UUID
 
 @Composable
 fun FilmPage(
     modifier: Modifier = Modifier,
+    filmID: UUID,
     filmImageUri: Uri,
     filmName: String,
     filmDescription: String,
-    onFilmClicked: (String) -> Unit
+    onFilmClicked: (UUID) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
         elevation = 10.dp,
-        modifier = modifier.clickable { onFilmClicked(filmName) }
+        modifier = modifier.clickable { onFilmClicked(filmID) }
     ) {
         Column(modifier = modifier.background(color = colors.primary)) {
             GlideImage(
@@ -61,7 +63,7 @@ fun FilmPage(
 fun FilmList(
     modifier: Modifier,
     films: List<Film>,
-    onFilmClicked: (String) -> Unit
+    onFilmClicked: (UUID) -> Unit
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(all = 8.dp)) {
         items(
@@ -71,7 +73,8 @@ fun FilmList(
                     filmImageUri = it.imageUri,
                     filmName = it.name,
                     filmDescription = it.description,
-                    onFilmClicked = onFilmClicked
+                    onFilmClicked = onFilmClicked,
+                    filmID = it.id
                 )
             },
         )

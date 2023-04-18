@@ -23,4 +23,7 @@ interface FilmDao {
     @Delete
     suspend fun removeFilm(film: Film)
 
+    @Query("DELETE FROM films")
+    suspend fun removeAllFilms()
+
 }

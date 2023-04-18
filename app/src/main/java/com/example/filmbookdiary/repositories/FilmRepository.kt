@@ -31,6 +31,8 @@ class FilmRepository private constructor(
 
     suspend fun removeFilm(film: Film) = database.filmDao().removeFilm(film)
 
+    suspend fun removeAllFilms() = database.filmDao().removeAllFilms()
+
     companion object {
         private var INSTANCE: FilmRepository? = null
 

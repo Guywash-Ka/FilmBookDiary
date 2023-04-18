@@ -22,8 +22,8 @@ fun DiaryNavHost(
     ) {
         composable(route = Films.route) {
             FilmsScreen(
-                onFilmClicked = { filmType ->
-                    navController.navigateToSingleFilm(filmType)
+                onFilmClicked = { filmID ->
+                    navController.navigateToSingleFilm(filmID.toString())
                 }
             )
         }
@@ -37,9 +37,9 @@ fun DiaryNavHost(
             route = SingleFilm.routeWithArgs,
             arguments = SingleFilm.arguments
         ) { navBackStackEntry ->
-            val filmType =
-                navBackStackEntry.arguments?.getString(SingleFilm.filmTypeArg)
-            SingleFilmScreen(filmType)
+            val filmID =
+                navBackStackEntry.arguments?.getString(SingleFilm.filmIDArg)
+            SingleFilmScreen(filmID)
         }
     }
 }
