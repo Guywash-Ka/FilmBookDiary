@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.database.FilmDatabase
+import com.example.filmbookdiary.database.migration_1_2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,7 @@ class FilmRepository private constructor(
             FilmDatabase::class.java,
             DATABASE_NAME
         )
+        .addMigrations(migration_1_2)
         .build()
 
     fun getFilms(): Flow<List<Film>> = database.filmDao().getFilms()

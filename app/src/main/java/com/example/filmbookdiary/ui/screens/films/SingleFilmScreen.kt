@@ -1,18 +1,18 @@
 package com.example.filmbookdiary.ui.screens.films
 
 import android.net.Uri
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,18 +50,25 @@ fun SingleFilmScreen(
     }
 
     Column(modifier = modifier.verticalScroll(enabled = true, state = ScrollState(0))) {
-        GlideImage(
-            imageModel = { imageUri ?: filmImageUri },
-            modifier = modifier.height(420.dp),
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop
+        Box(contentAlignment = Alignment.BottomEnd) {
+            GlideImage(
+                imageModel = { imageUri ?: filmImageUri },
+                modifier = modifier.height(420.dp),
+                imageOptions = ImageOptions(
+                    contentScale = ContentScale.Crop
+                )
             )
-        )
+            if (isEdited.value) {
+                IconButton(onClick = { launcher.launch("image/*") }) {
+                    Icon(Icons.Filled.Edit, contentDescription = "Change image")
+                }
+            }
+        }
         if (isEdited.value){
             EditFilmScreen(
                 filmName = filmName,
                 filmDescription = filmDescription,
-                launcher = launcher
+                singleFilmViewModel = singleFilmViewModel
             )
         }
         else {
@@ -71,8 +78,6 @@ fun SingleFilmScreen(
                 filmDescription = filmDescription
             )
         }
-
-
 
         Button(onClick = { isEdited.value = !isEdited.value }) {
             Text(if (isEdited.value) "Save" else "Edit")
@@ -84,7 +89,7 @@ fun SingleFilmScreen(
 fun EditFilmScreen(
     filmName: String?,
     filmDescription: String?,
-    launcher: ManagedActivityResultLauncher<String, Uri?>
+    singleFilmViewModel: SingleFilmViewModel
 ) {
     var name by remember { mutableStateOf(filmName) }
     var description by remember { mutableStateOf(filmDescription) }
@@ -92,19 +97,40 @@ fun EditFilmScreen(
     name?.let {
         TextField(
             value = it,
-            onValueChange = { newNameText -> name = newNameText },
-            textStyle = MaterialTheme.typography.h4
+            onValueChange = { newNameText ->
+                if (!newNameText.contains("\n")) {
+                    name = newNameText
+                    singleFilmViewModel.updateFilm { oldFilm ->
+                        oldFilm.copy(name = name!!)
+                    }
+                } },
+            textStyle = MaterialTheme.typography.h4,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent
+            )
         ) }
     description?.let {
-        TextField(
+        OutlinedTextField(
             value = it,
-            onValueChange = { newDescriptionText -> description = newDescriptionText }
+            onValueChange = { newDescriptionText ->
+                description = newDescriptionText
+                singleFilmViewModel.updateFilm { oldFilm ->
+                    oldFilm.copy(description = description!!)
+                }
+            },
+            label = { Text("Description") }
+//            colors = TextFieldDefaults.textFieldColors(
+//                backgroundColor = Color.Transparent,
+//                focusedIndicatorColor = Color.Transparent,
+//                unfocusedIndicatorColor = Color.Transparent,
+//                disabledIndicatorColor = Color.Transparent,
+//                errorIndicatorColor = Color.Transparent
+//            )
         ) }
-    Button(
-        onClick = { launcher.launch("image/*") },
-    ) {
-        Text(text = "Change image")
-    }
 }
 
 @Composable

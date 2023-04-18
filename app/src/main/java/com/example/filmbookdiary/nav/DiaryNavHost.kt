@@ -22,7 +22,7 @@ fun DiaryNavHost(
     ) {
         composable(route = Films.route) {
             FilmsScreen(
-                onFilmClicked = { filmID ->
+                navigateToSingleFilm = { filmID ->
                     navController.navigateToSingleFilm(filmID.toString())
                 }
             )
