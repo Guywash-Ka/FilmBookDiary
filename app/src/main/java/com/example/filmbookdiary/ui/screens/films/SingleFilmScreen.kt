@@ -1,7 +1,7 @@
 package com.example.filmbookdiary.ui.screens.films
 
-import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ScrollState
@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -22,13 +23,14 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import java.util.*
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SingleFilmScreen(
-    filmID: String? = UUID.randomUUID().toString(), // TODO(сейчас реализовано через filmType который возвращает название фильма, надо переделать под UUID)
     modifier: Modifier = Modifier,
+    filmID: String? = UUID.randomUUID().toString(),
     singleFilmViewModel: SingleFilmViewModel = viewModel(factory = SingFilmViewModelFactory(UUID.fromString(filmID))),
 ) {
+    val isEdited = remember { mutableStateOf(false) }
+
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
@@ -55,22 +57,73 @@ fun SingleFilmScreen(
                 contentScale = ContentScale.Crop
             )
         )
-        if (filmName != null) {
-            Text(
-                modifier = modifier.padding(start = 8.dp),
-                fontWeight = FontWeight.ExtraBold,
-                text = filmName, //TODO
-                style = MaterialTheme.typography.h4,
+        if (isEdited.value){
+            EditFilmScreen(
+                filmName = filmName,
+                filmDescription = filmDescription,
+                launcher = launcher
             )
         }
-        if (filmDescription != null) {
-            Text(
-                modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
-                text = filmDescription, //TODO
+        else {
+            ShowFilmScreen(
+                modifier = modifier,
+                filmName = filmName,
+                filmDescription = filmDescription
             )
         }
-        Button(onClick = { launcher.launch("image/*") }) {
-            Text(text = "Change image")
+
+
+
+        Button(onClick = { isEdited.value = !isEdited.value }) {
+            Text(if (isEdited.value) "Save" else "Edit")
         }
+    }
+}
+
+@Composable
+fun EditFilmScreen(
+    filmName: String?,
+    filmDescription: String?,
+    launcher: ManagedActivityResultLauncher<String, Uri?>
+) {
+    var name by remember { mutableStateOf(filmName) }
+    var description by remember { mutableStateOf(filmDescription) }
+
+    name?.let {
+        TextField(
+            value = it,
+            onValueChange = { newNameText -> name = newNameText },
+            textStyle = MaterialTheme.typography.h4
+        ) }
+    description?.let {
+        TextField(
+            value = it,
+            onValueChange = { newDescriptionText -> description = newDescriptionText }
+        ) }
+    Button(
+        onClick = { launcher.launch("image/*") },
+    ) {
+        Text(text = "Change image")
+    }
+}
+
+@Composable
+fun ShowFilmScreen(
+    modifier: Modifier,
+    filmName: String?,
+    filmDescription: String?
+) {
+    filmName?.let {
+        Text(
+        modifier = modifier.padding(start = 8.dp),
+        fontWeight = FontWeight.ExtraBold,
+        text = filmName,
+        style = MaterialTheme.typography.h4,
+    ) }
+    filmDescription?.let {
+        Text(
+            modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
+            text = filmDescription,
+        )
     }
 }

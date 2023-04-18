@@ -39,7 +39,7 @@ fun DiaryNavHost(
         ) { navBackStackEntry ->
             val filmID =
                 navBackStackEntry.arguments?.getString(SingleFilm.filmIDArg)
-            SingleFilmScreen(filmID)
+            SingleFilmScreen(filmID = filmID)
         }
     }
 }
