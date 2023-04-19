@@ -30,6 +30,7 @@ fun FilmPage(
     filmImageUri: Uri,
     filmName: String,
     filmDescription: String,
+    filmRating: Int?,
     onFilmClicked: (UUID) -> Unit,
 ) {
     Card(
@@ -51,23 +52,36 @@ fun FilmPage(
                     )
                 }
             }
-            Column() {
-                Text(
-                    modifier = modifier.padding(start = 8.dp),
-                    fontWeight = FontWeight.ExtraBold,
-                    text = filmName,
-                    style = typography.h4,
-                    color = colors.onPrimary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
-                    text = filmDescription,
-                    color = colors.onPrimary,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Row(
+                modifier = modifier.fillMaxWidth(1f),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column() {
+                    Text(
+                        modifier = modifier.padding(start = 8.dp),
+                        fontWeight = FontWeight.ExtraBold,
+                        text = filmName,
+                        style = typography.h4,
+                        color = colors.onPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
+                        text = filmDescription,
+                        color = colors.onPrimary,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                if (filmRating != null) {
+                    Text(
+                        text = "$filmRating/10",
+                        fontWeight = FontWeight.ExtraBold,
+                        style = typography.h4,
+                        color = colors.onPrimary
+                    )
+                }
             }
         }
     }
@@ -84,11 +98,12 @@ fun FilmList(
             items = films,
             itemContent = {
                 FilmPage(
+                    filmID = it.id,
                     filmImageUri = it.imageUri,
                     filmName = it.name,
                     filmDescription = it.description,
+                    filmRating = it.rating,
                     onFilmClicked = onFilmClicked,
-                    filmID = it.id,
                 )
             },
         )

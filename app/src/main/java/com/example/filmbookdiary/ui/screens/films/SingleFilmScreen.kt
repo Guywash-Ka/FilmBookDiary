@@ -7,6 +7,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
@@ -40,6 +41,7 @@ fun SingleFilmScreen(
     val filmName = film?.name
     val filmImageUri = film?.imageUri
     val filmDescription = film?.description
+    val filmRating = film?.rating
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -68,6 +70,7 @@ fun SingleFilmScreen(
             EditFilmScreen(
                 filmName = filmName,
                 filmDescription = filmDescription,
+                filmRating = filmRating,
                 singleFilmViewModel = singleFilmViewModel
             )
         }
@@ -75,6 +78,7 @@ fun SingleFilmScreen(
             ShowFilmScreen(
                 modifier = modifier,
                 filmName = filmName,
+                filmRating = filmRating,
                 filmDescription = filmDescription
             )
         }
@@ -89,10 +93,12 @@ fun SingleFilmScreen(
 fun EditFilmScreen(
     filmName: String?,
     filmDescription: String?,
+    filmRating: Int?,
     singleFilmViewModel: SingleFilmViewModel
 ) {
     var name by remember { mutableStateOf(filmName) }
     var description by remember { mutableStateOf(filmDescription) }
+    var rating by remember { mutableStateOf(filmRating) }
 
     name?.let {
         TextField(
@@ -131,12 +137,34 @@ fun EditFilmScreen(
 //                errorIndicatorColor = Color.Transparent
 //            )
         ) }
+
+    rating?.let {
+        TextField(
+            value = it.toString(),
+            onValueChange = { newRatingText ->
+                rating = newRatingText.toInt()
+                singleFilmViewModel.updateFilm { oldFilm ->
+                    oldFilm.copy(rating = rating!!)
+                }
+            },
+            textStyle = MaterialTheme.typography.h4,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent
+            )
+        )
+
+    }
 }
 
 @Composable
 fun ShowFilmScreen(
     modifier: Modifier,
     filmName: String?,
+    filmRating: Int?,
     filmDescription: String?
 ) {
     filmName?.let {
@@ -146,6 +174,16 @@ fun ShowFilmScreen(
         text = filmName,
         style = MaterialTheme.typography.h4,
     ) }
+
+    filmRating?.let {
+        Text(
+            modifier = modifier.padding(start = 8.dp),
+            fontWeight = FontWeight.ExtraBold,
+            text = "$filmRating/10",
+            style = MaterialTheme.typography.h4,
+        )
+    }
+
     filmDescription?.let {
         Text(
             modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
