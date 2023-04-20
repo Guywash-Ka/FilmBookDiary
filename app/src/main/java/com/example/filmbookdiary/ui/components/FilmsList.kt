@@ -13,6 +13,7 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.viewmodel.FilmViewModel
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Composable
@@ -32,7 +34,10 @@ fun FilmPage(
     filmDescription: String,
     filmRating: Int?,
     onFilmClicked: (UUID) -> Unit,
+    filmViewModel: FilmViewModel
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Card(
         shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
         elevation = 10.dp,
@@ -44,7 +49,11 @@ fun FilmPage(
                     imageModel = { filmImageUri },
                     modifier = modifier.height(280.dp)
                 )
-                IconButton(onClick = { /* TODO */ }) {
+                IconButton(onClick = {
+                    coroutineScope.launch {
+                        filmViewModel.removeFilm(filmViewModel.getFilm(filmID))
+                    }
+                }) {
                     Icon(
                         Icons.Filled.Clear,
                         contentDescription = "Remove element",
@@ -92,6 +101,7 @@ fun FilmList(
     modifier: Modifier,
     films: List<Film>,
     onFilmClicked: (UUID) -> Unit,
+    filmViewModel: FilmViewModel
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(all = 8.dp)) {
         items(
@@ -104,6 +114,7 @@ fun FilmList(
                     filmDescription = it.description,
                     filmRating = it.rating,
                     onFilmClicked = onFilmClicked,
+                    filmViewModel = filmViewModel
                 )
             },
         )
