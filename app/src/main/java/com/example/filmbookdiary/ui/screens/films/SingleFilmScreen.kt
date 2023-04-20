@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,12 +19,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.filmbookdiary.ui.components.RatingSelection
 import com.example.filmbookdiary.viewmodel.SingFilmViewModelFactory
 import com.example.filmbookdiary.viewmodel.SingleFilmViewModel
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.launch
 import java.util.*
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SingleFilmScreen(
     modifier: Modifier = Modifier,
@@ -51,40 +55,69 @@ fun SingleFilmScreen(
         }
     }
 
-    Column(modifier = modifier.verticalScroll(enabled = true, state = ScrollState(0))) {
-        Box(contentAlignment = Alignment.BottomEnd) {
-            GlideImage(
-                imageModel = { imageUri ?: filmImageUri },
-                modifier = modifier.height(420.dp),
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
+    val scope = rememberCoroutineScope()
+
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetContent = {
+            RatingSelection(sheetState, singleFilmViewModel)
+        },
+        sheetBackgroundColor = colors.surface,
+    ) {
+        Column(modifier = modifier.verticalScroll(enabled = true, state = ScrollState(0))) {
+            Box(contentAlignment = Alignment.BottomEnd) {
+                GlideImage(
+                    imageModel = { imageUri ?: filmImageUri },
+                    modifier = modifier.height(420.dp),
+                    imageOptions = ImageOptions(
+                        contentScale = ContentScale.Crop
+                    )
                 )
-            )
-            if (isEdited.value) {
-                IconButton(onClick = { launcher.launch("image/*") }) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Change image")
+                if (isEdited.value) {
+                    IconButton(onClick = { launcher.launch("image/*") }) {
+                        Icon(Icons.Filled.Edit, contentDescription = "Change image")
+                    }
                 }
             }
-        }
-        if (isEdited.value){
-            EditFilmScreen(
-                filmName = filmName,
-                filmDescription = filmDescription,
-                filmRating = filmRating,
-                singleFilmViewModel = singleFilmViewModel
-            )
-        }
-        else {
-            ShowFilmScreen(
-                modifier = modifier,
-                filmName = filmName,
-                filmRating = filmRating,
-                filmDescription = filmDescription
-            )
-        }
+            if (isEdited.value) {
+                EditFilmScreen(
+                    filmName = filmName,
+                    filmDescription = filmDescription,
+                    filmRating = filmRating,
+                    singleFilmViewModel = singleFilmViewModel
+                )
+            } else {
+                ShowFilmScreen(
+                    modifier = modifier,
+                    filmName = filmName,
+                    filmRating = filmRating,
+                    filmDescription = filmDescription
+                )
+            }
 
-        Button(onClick = { isEdited.value = !isEdited.value }) {
-            Text(if (isEdited.value) "Save" else "Edit")
+            Button(onClick = {
+                isEdited.value = !isEdited.value
+            }) {
+                Text(if (isEdited.value) "Save" else "Edit")
+            }
+
+            IconButton(
+                onClick = {
+                    scope.launch {
+                        if (!sheetState.isVisible) {
+                            sheetState.show()
+                        } else {
+                            sheetState.hide()
+                        }
+                    }
+                    },
+
+            ) {
+                Icon(Icons.Filled.Star, contentDescription = "Rate", tint = Color.Yellow)
+            }
         }
     }
 }
@@ -137,27 +170,6 @@ fun EditFilmScreen(
 //                errorIndicatorColor = Color.Transparent
 //            )
         ) }
-
-    rating?.let {
-        TextField(
-            value = it.toString(),
-            onValueChange = { newRatingText ->
-                rating = newRatingText.toInt()
-                singleFilmViewModel.updateFilm { oldFilm ->
-                    oldFilm.copy(rating = rating!!)
-                }
-            },
-            textStyle = MaterialTheme.typography.h4,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent
-            )
-        )
-
-    }
 }
 
 @Composable

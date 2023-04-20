@@ -27,7 +27,6 @@ fun FilmsScreen(
 ) {
     val filmsList = filmViewModel.films.collectAsState(emptyList()).value
     val coroutineScope = rememberCoroutineScope()
-
     Box(modifier = modifier.fillMaxSize(1f)) {
         FilmList(
             modifier = modifier,
@@ -39,7 +38,7 @@ fun FilmsScreen(
                 var newUUID: UUID
                 coroutineScope.launch {
                     newUUID = UUID.randomUUID()
-                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", 9))
+                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", null))
                     navigateToSingleFilm(newUUID)
                 }
             },
