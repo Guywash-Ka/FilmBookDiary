@@ -54,9 +54,9 @@ object SingleBook: DiaryDestination {
         get() = TODO("Not yet implemented")
     override val route = "singleBook"
     const val bookIDArg = "book_id"
-    val routeWithArgs = "${SingleBook.route}/{${SingleBook.bookIDArg}}"
+    val routeWithArgs = "${route}/{${bookIDArg}}"
     val arguments = listOf(
-        navArgument(SingleBook.bookIDArg) { type = NavType.StringType }
+        navArgument(bookIDArg) { type = NavType.StringType }
     )
 }
 

@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.filmbookdiary.ui.screens.books.BooksScreen
+import com.example.filmbookdiary.ui.screens.books.SingleBookScreen
 import com.example.filmbookdiary.ui.screens.films.FilmsScreen
 import com.example.filmbookdiary.ui.screens.films.SingleFilmScreen
 import com.example.filmbookdiary.ui.screens.profile.ProfileScreen
@@ -35,7 +36,11 @@ fun DiaryNavHost(
             )
         }
         composable(route = Books.route) {
-            BooksScreen()
+            BooksScreen(
+                navigateToSingleElement = { bookID ->
+                    navController.navigateToSingleBook(bookID.toString())
+                }
+            )
         }
         composable(route = Profile.route) {
             ProfileScreen()
@@ -47,6 +52,14 @@ fun DiaryNavHost(
             val filmID =
                 navBackStackEntry.arguments?.getString(SingleFilm.filmIDArg)
             SingleFilmScreen(filmID = filmID)
+        }
+        composable(
+            route = SingleBook.routeWithArgs,
+            arguments = SingleBook.arguments
+        ) { navBackStackEntry ->
+            val bookID =
+                navBackStackEntry.arguments?.getString(SingleBook.bookIDArg)
+            SingleBookScreen(bookID = bookID)
         }
     }
 }
@@ -60,4 +73,8 @@ fun NavHostController.navigatePopUpTo(route: String) {
 
 private fun NavHostController.navigateToSingleFilm(filmType: String) {
     this.navigateSingleTopTo("${SingleFilm.route}/$filmType")
+}
+
+private fun NavHostController.navigateToSingleBook(bookType: String) {
+    this.navigateSingleTopTo("${SingleBook.route}/$bookType")
 }
