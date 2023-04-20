@@ -3,7 +3,7 @@ package com.example.filmbookdiary.database
 import android.net.Uri
 import androidx.room.TypeConverter
 
-class FilmTypeConverters {
+class FBTypeConverters {
     @TypeConverter
     fun fromUri(uri: Uri): String {
         return uri.toString()

@@ -2,7 +2,7 @@ package com.example.filmbookdiary.repositories
 
 import android.content.Context
 import androidx.room.Room
-import com.example.filmbookdiary.data.Film
+import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.database.FilmBookDatabase
 import com.example.filmbookdiary.database.migration_1_2
 import com.example.filmbookdiary.database.migration_2_3
@@ -14,7 +14,7 @@ import java.util.UUID
 
 private const val DATABASE_NAME = "FBDiary_db"
 
-class FilmRepository private constructor(
+class BookRepository private constructor(
     context: Context,
     private val coroutineScope: CoroutineScope = GlobalScope
 ){
@@ -28,33 +28,33 @@ class FilmRepository private constructor(
         .addMigrations(migration_2_3)
         .build()
 
-    fun getFilms(): Flow<List<Film>> = database.filmDao().getFilms()
+    fun getBooks(): Flow<List<Book>> = database.bookDao().getBooks()
 
-    suspend fun getFilm(id: UUID): Film = database.filmDao().getFilm(id)
+    suspend fun getBook(id: UUID): Book = database.bookDao().getBook(id)
 
-    suspend fun addFilm(film: Film) = database.filmDao().addFilm(film)
+    suspend fun addBook(book: Book) = database.bookDao().addBook(book)
 
-    suspend fun removeFilm(film: Film) = database.filmDao().removeFilm(film)
+    suspend fun removeBook(book: Book) = database.bookDao().removeBook(book)
 
-    suspend fun removeAllFilms() = database.filmDao().removeAllFilms()
+    suspend fun removeAllBooks() = database.bookDao().removeAllBooks()
 
-    fun updateFilm(film: Film) {
+    fun updateBook(book: Book) {
         coroutineScope.launch {
-            database.filmDao().updateFilm(film)
+            database.bookDao().updateBook(book)
         }
     }
 
     companion object {
-        private var INSTANCE: FilmRepository? = null
+        private var INSTANCE: BookRepository? = null
 
         fun initialize(context: Context) {
             if (INSTANCE == null) {
-                INSTANCE = FilmRepository(context)
+                INSTANCE = BookRepository(context)
             }
         }
 
-        fun get(): FilmRepository {
-            return INSTANCE ?: throw java.lang.IllegalStateException("FilmRepository must be initialized")
+        fun get(): BookRepository {
+            return INSTANCE ?: throw java.lang.IllegalStateException("BookRepository must be initialized")
         }
     }
 }

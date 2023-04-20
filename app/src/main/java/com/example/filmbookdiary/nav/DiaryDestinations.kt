@@ -16,6 +16,13 @@ interface DiaryDestination {
     val route: String
 }
 
+object Splash: DiaryDestination {
+    override val icon: ImageVector
+        get() = TODO("Not yet implemented")
+
+    override val route = "splash"
+}
+
 object Films : DiaryDestination {
     override val icon = Icons.Rounded.PlayArrow
     override val route = "films"
@@ -33,12 +40,23 @@ object Profile : DiaryDestination {
 
 object SingleFilm: DiaryDestination {
     override val icon: ImageVector
-        get() = TODO("Not yet implemented")//=
+        get() = TODO("Not yet implemented")
     override val route = "singleFilm"
     const val filmIDArg = "film_id"
     val routeWithArgs = "${route}/{${filmIDArg}}"
     val arguments = listOf(
         navArgument(filmIDArg) { type = NavType.StringType }
+    )
+}
+
+object SingleBook: DiaryDestination {
+    override val icon: ImageVector
+        get() = TODO("Not yet implemented")
+    override val route = "singleBook"
+    const val bookIDArg = "book_id"
+    val routeWithArgs = "${SingleBook.route}/{${SingleBook.bookIDArg}}"
+    val arguments = listOf(
+        navArgument(SingleBook.bookIDArg) { type = NavType.StringType }
     )
 }
 

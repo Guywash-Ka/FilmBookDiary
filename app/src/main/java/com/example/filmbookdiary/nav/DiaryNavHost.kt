@@ -9,6 +9,7 @@ import com.example.filmbookdiary.ui.screens.books.BooksScreen
 import com.example.filmbookdiary.ui.screens.films.FilmsScreen
 import com.example.filmbookdiary.ui.screens.films.SingleFilmScreen
 import com.example.filmbookdiary.ui.screens.profile.ProfileScreen
+import com.example.filmbookdiary.ui.screens.splash.SplashScreen
 
 @Composable
 fun DiaryNavHost(
@@ -17,9 +18,15 @@ fun DiaryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Films.route,
+        startDestination = Splash.route,
         modifier = modifier
     ) {
+        composable(route = Splash.route) {
+            SplashScreen {
+                navController.navigatePopUpTo(Films.route)
+            }
+        }
+
         composable(route = Films.route) {
             FilmsScreen(
                 navigateToSingleFilm = { filmID ->
@@ -46,6 +53,10 @@ fun DiaryNavHost(
 
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) { launchSingleTop = true }
+
+fun NavHostController.navigatePopUpTo(route: String) {
+    this.navigate(route) { popUpTo(0) { inclusive = false } }
+}
 
 private fun NavHostController.navigateToSingleFilm(filmType: String) {
     this.navigateSingleTopTo("${SingleFilm.route}/$filmType")
