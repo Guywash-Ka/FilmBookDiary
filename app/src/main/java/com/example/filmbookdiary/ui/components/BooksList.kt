@@ -18,22 +18,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toIcon
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.filmbookdiary.FilmBookDiaryApplication.Companion.maxRating
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Book
-import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.viewmodel.BookViewModel
-import com.example.filmbookdiary.viewmodel.FilmViewModel
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -59,14 +53,8 @@ fun BookPage(
     ) {
         Box() {
             Row(modifier = modifier.background(color = colors.primary)) {
-//                GlideImage(
-//                    imageModel = { bookImageUri },
-//                    modifier = modifier.height(240.dp).width(140.dp)
-//                )
-                Image(
-                    painter = rememberAsyncImagePainter(bookImageUri),
-                    contentDescription = "My content description",
-                    contentScale = ContentScale.FillHeight,
+                GlideImage(
+                    imageModel = { bookImageUri },
                     modifier = modifier.height(240.dp).width(140.dp)
                 )
                 Row(
@@ -78,9 +66,9 @@ fun BookPage(
                             modifier = modifier.padding(start = 8.dp, end = 30.dp),
                             fontWeight = FontWeight.ExtraBold,
                             text = bookName,
-                            style = typography.h4,
+                            style = typography.h5,
                             color = colors.onPrimary,
-                            maxLines = 1,
+                            maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
                         Text(
@@ -89,14 +77,14 @@ fun BookPage(
                             text = bookAuthor,
                             style = typography.h6,
                             color = colors.onPrimary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            maxLines = 2,
+                            overflow = TextOverflow.Clip
                         )
                         Text(
                             modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
                             text = bookDescription,
                             color = colors.onPrimary,
-                            maxLines = 2,
+                            maxLines = 20,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
@@ -114,7 +102,9 @@ fun BookPage(
                 coroutineScope.launch {
                     bookViewModel.removeBook(bookViewModel.getBook(bookID))
                 }
-            }) {
+            },
+                modifier = modifier.align(Alignment.TopEnd)
+            ) {
                 Icon(
                     Icons.Filled.Clear,
                     contentDescription = "Remove element",

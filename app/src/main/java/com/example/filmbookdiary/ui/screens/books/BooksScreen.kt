@@ -54,18 +54,18 @@ fun BooksScreen(
             Icon(Icons.Filled.Add, "Add new element")
         }
 
-        FloatingActionButton(
-            onClick = { coroutineScope.launch {
-                bookViewModel.removeAllBooks()
-            }
-            },
-            modifier = modifier
-                .padding(4.dp)
-                .align(alignment = Alignment.BottomStart),
-            elevation = FloatingActionButtonDefaults.elevation(4.dp),
-            backgroundColor = colors.primaryVariant
-        ) {
-            Icon(Icons.Filled.Clear, "Remove all elements")
-        }
+//        FloatingActionButton(
+//            onClick = { coroutineScope.launch {
+//                bookViewModel.removeAllBooks()
+//            }
+//            },
+//            modifier = modifier
+//                .padding(4.dp)
+//                .align(alignment = Alignment.BottomStart),
+//            elevation = FloatingActionButtonDefaults.elevation(4.dp),
+//            backgroundColor = colors.primaryVariant
+//        ) {
+//            Icon(Icons.Filled.Clear, "Remove all elements")
+//        }
     }
 }
