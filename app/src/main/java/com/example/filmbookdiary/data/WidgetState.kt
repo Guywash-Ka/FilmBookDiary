@@ -1,6 +1,6 @@
 package com.example.filmbookdiary.data
 
-enum class SearchWidgetState {
+enum class WidgetState {
     OPENED,
     CLOSED
 }

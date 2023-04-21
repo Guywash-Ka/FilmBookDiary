@@ -5,20 +5,15 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.filmbookdiary.data.SearchWidgetState
+import com.example.filmbookdiary.data.WidgetState
+import com.example.filmbookdiary.database.FilterState
 import com.example.filmbookdiary.nav.*
 import com.example.filmbookdiary.ui.components.DiaryTabRow
 import com.example.filmbookdiary.ui.components.MainAppBar
@@ -48,6 +43,8 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
 
         val searchWidgetState by topBarViewModel.searchWidgetState
         val searchTextState by topBarViewModel.searchTextState
+        val filterWidgetState by topBarViewModel.filterWidgetState
+        val filterSelectState by topBarViewModel.filterSelectState
         Scaffold(
             topBar = {
                 if (currentScreen != Splash) {
@@ -59,19 +56,28 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
                         },
                         searchWidgetState = searchWidgetState,
                         searchTextState = searchTextState,
+                        filterWidgetState = filterWidgetState,
+                        filterSelectState = filterSelectState,
                         onTextChange = {
                             topBarViewModel.updateSearchTextState(newValue = it)
                         },
                         onCloseClicked = {
-                            topBarViewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
+                            topBarViewModel.updateSearchWidgetState(newValue = WidgetState.CLOSED)
+                            topBarViewModel.updateFilterWidgetState(newValue = WidgetState.CLOSED)
                         },
                         onSearchClicked = {
                             Log.d("Searched Text", it)
                         },
                         onSearchTriggered = {
-                            topBarViewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                            topBarViewModel.updateSearchWidgetState(newValue = WidgetState.OPENED)
+                        },
+                        onFilterSelectClicked = {
+                            topBarViewModel.updateFilterSelectState(newValue = it)
+                        },
+                        onFilterTriggered = {
+                            topBarViewModel.updateFilterWidgetState(newValue = WidgetState.OPENED)
                         }
-                    )
+,                    )
                 }
             },
             bottomBar = {
@@ -89,7 +95,8 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
             DiaryNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
-                searchTextState = searchTextState
+                searchTextState = searchTextState,
+                filterSelectState = filterSelectState
             )
 
         }

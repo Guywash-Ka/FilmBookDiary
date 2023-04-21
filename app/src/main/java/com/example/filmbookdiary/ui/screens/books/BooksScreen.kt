@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.data.Film
+import com.example.filmbookdiary.database.FilterState
 import com.example.filmbookdiary.ui.components.BookList
 import com.example.filmbookdiary.ui.components.FilmList
 import com.example.filmbookdiary.viewmodel.BookViewModel
@@ -26,13 +27,19 @@ fun BooksScreen(
     modifier: Modifier = Modifier,
     bookViewModel: BookViewModel = viewModel(),
     navigateToSingleElement: (UUID) -> Unit = {},
-    searchTextState: String
+    searchTextState: String,
+    filterSelectState: FilterState
 ) {
 //    val booksList = bookViewModel.books.collectAsState(emptyList()).value
-    val booksList = if (searchTextState == "") {
+    val preBooksList = if (searchTextState == "") {
         bookViewModel.books.collectAsState(emptyList()).value.reversed()
     } else {
         bookViewModel.searchBooksByName(searchTextState).collectAsState(emptyList()).value.reversed()
+    }
+    val booksList = when (filterSelectState) { // TODO СДЕЛАТЬ ЧЕРЕЗ БД
+        FilterState.DATE -> preBooksList
+        FilterState.NAME -> preBooksList.sortedBy { it.name }
+        FilterState.RATING -> preBooksList.sortedBy { it.rating }.reversed()
     }
 
     val coroutineScope = rememberCoroutineScope()

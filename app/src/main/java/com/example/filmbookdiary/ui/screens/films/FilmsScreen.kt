@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Film
+import com.example.filmbookdiary.database.FilterState
 import com.example.filmbookdiary.ui.components.FilmList
 import com.example.filmbookdiary.viewmodel.FilmViewModel
 import kotlinx.coroutines.launch
@@ -24,15 +25,21 @@ fun FilmsScreen(
     modifier: Modifier = Modifier,
     filmViewModel: FilmViewModel = viewModel(),
     navigateToSingleFilm: (UUID) -> Unit = {},
-    searchTextState: String
+    searchTextState: String,
+    filterSelectState: FilterState
 ) {
 
 
 //    val filmsList = filmViewModel.films.collectAsState(emptyList()).value
-    val filmsList = if (searchTextState == "") {
+    val preFilmsList = if (searchTextState == "") {
         filmViewModel.films.collectAsState(emptyList()).value.reversed()
     } else {
         filmViewModel.searchFilmsByName(searchTextState).collectAsState(emptyList()).value.reversed()
+    }
+    val filmsList = when (filterSelectState) { // TODO СДЕЛАТЬ ЧЕРЕЗ БД
+        FilterState.DATE -> preFilmsList
+        FilterState.NAME -> preFilmsList.sortedBy { it.name }
+        FilterState.RATING -> preFilmsList.sortedBy { it.rating }.reversed()
     }
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize(1f)) {
