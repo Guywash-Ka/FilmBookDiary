@@ -12,10 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.filmbookdiary.nav.DiaryNavHost
-import com.example.filmbookdiary.nav.Films
-import com.example.filmbookdiary.nav.diaryTabRowScreens
-import com.example.filmbookdiary.nav.navigateSingleTopTo
+import com.example.filmbookdiary.nav.*
 import com.example.filmbookdiary.ui.components.DiaryTabRow
 import com.example.filmbookdiary.ui.theme.FilmBookDiaryTheme
 
@@ -34,16 +31,18 @@ fun DiaryApp() {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen = diaryTabRowScreens.find { it.route == currentDestination?.route }?: Films
+        val currentScreen = diaryTabRowScreens.find { it.route == currentDestination?.route }?: Splash
         Scaffold(
             bottomBar = {
-                DiaryTabRow(
-                    allScreens = diaryTabRowScreens,
-                    onTabSelected = { newScreen ->
-                        navController.navigateSingleTopTo(newScreen.route)
-                    },
-                    currentScreen = currentScreen
-                )
+                if (currentScreen.route != Splash.route) {
+                    DiaryTabRow(
+                        allScreens = diaryTabRowScreens,
+                        onTabSelected = { newScreen ->
+                            navController.navigateSingleTopTo(newScreen.route)
+                        },
+                        currentScreen = currentScreen
+                    )
+                }
             }
         ) {innerPadding ->
             DiaryNavHost(
