@@ -63,11 +63,16 @@ fun SingleBookScreen(
     )
     val scope = rememberCoroutineScope()
 
+    fun updateBook(rating: Int) {
+        singleBookViewModel.updateBook { oldBook ->
+            oldBook.copy(rating = rating)
+        }
+    }
+
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-//            RatingSelection(sheetState, singleBookViewModel)
-            Text("Here's the future rating")
+            RatingSelection(sheetState, ::updateBook)
         },
         sheetBackgroundColor = colors.surface,
     ) {

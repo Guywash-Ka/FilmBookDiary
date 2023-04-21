@@ -60,10 +60,16 @@ fun SingleFilmScreen(
     )
     val scope = rememberCoroutineScope()
 
+    fun updateFilm(rating: Int) {
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(rating = rating)
+        }
+    }
+
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            RatingSelection(sheetState, singleFilmViewModel)
+            RatingSelection(sheetState, ::updateFilm)
         },
         sheetBackgroundColor = colors.surface,
     ) {
