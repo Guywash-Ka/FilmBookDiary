@@ -44,6 +44,7 @@ fun DiaryTabRow(
             Modifier.selectableGroup().fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
+            Text(currentScreen.route)
             allScreens.forEach { screen ->
                 DiaryTab(
                     text = screen.route,

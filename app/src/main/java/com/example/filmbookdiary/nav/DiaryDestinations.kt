@@ -61,3 +61,4 @@ object SingleBook: DiaryDestination {
 }
 
 val diaryTabRowScreens = listOf(Films, Books, Profile)
+val diaryAllScreens = listOf(Films, Books, Profile, Splash, SingleFilm, SingleBook)

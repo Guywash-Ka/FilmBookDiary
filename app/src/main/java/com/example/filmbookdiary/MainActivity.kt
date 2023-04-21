@@ -17,6 +17,7 @@ import com.example.filmbookdiary.database.FilterState
 import com.example.filmbookdiary.nav.*
 import com.example.filmbookdiary.ui.components.DiaryTabRow
 import com.example.filmbookdiary.ui.components.MainAppBar
+import com.example.filmbookdiary.ui.screens.films.SingleFilmScreen
 import com.example.filmbookdiary.ui.theme.FilmBookDiaryTheme
 import com.example.filmbookdiary.viewmodel.TopBarViewModel
 import java.util.*
@@ -39,7 +40,7 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen = diaryTabRowScreens.find { it.route == currentDestination?.route }?: Splash
+        val currentScreen = diaryAllScreens.find { it.route == currentDestination?.route?.substringBefore("/") }?: Films
 
         val searchWidgetState by topBarViewModel.searchWidgetState
         val searchTextState by topBarViewModel.searchTextState
