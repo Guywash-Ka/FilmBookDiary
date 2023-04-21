@@ -66,19 +66,5 @@ fun FilmsScreen(
         ) {
             Icon(Icons.Filled.Add, "Add new element")
         }
-
-        FloatingActionButton(
-            onClick = { coroutineScope.launch {
-                filmViewModel.removeAllFilms()
-            }
-            },
-            modifier = modifier
-                .padding(4.dp)
-                .align(alignment = Alignment.BottomStart),
-            elevation = FloatingActionButtonDefaults.elevation(4.dp),
-            backgroundColor = colors.primaryVariant
-        ) {
-            Icon(Icons.Filled.Clear, "Remove all elements")
-        }
     }
 }
