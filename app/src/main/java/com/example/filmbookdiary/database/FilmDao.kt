@@ -26,4 +26,7 @@ interface FilmDao {
     @Update
     suspend fun updateFilm(film: Film)
 
+    @Query("SELECT * FROM films WHERE name LIKE '%' || :filmName || '%'")
+    fun searchFilmsByName(filmName: String): Flow<List<Film>>
+
 }

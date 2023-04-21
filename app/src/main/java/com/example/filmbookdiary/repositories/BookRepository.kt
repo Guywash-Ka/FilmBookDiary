@@ -3,6 +3,7 @@ package com.example.filmbookdiary.repositories
 import android.content.Context
 import androidx.room.Room
 import com.example.filmbookdiary.data.Book
+import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.database.FilmBookDatabase
 import com.example.filmbookdiary.database.migration_1_2
 import com.example.filmbookdiary.database.migration_2_3
@@ -43,6 +44,8 @@ class BookRepository private constructor(
             database.bookDao().updateBook(book)
         }
     }
+
+    fun searchBooksByName(name: String): Flow<List<Book>> = database.bookDao().searchBooksByName(name)
 
     companion object {
         private var INSTANCE: BookRepository? = null

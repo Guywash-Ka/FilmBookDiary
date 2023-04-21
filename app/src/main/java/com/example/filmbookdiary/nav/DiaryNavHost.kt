@@ -1,6 +1,7 @@
 package com.example.filmbookdiary.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,7 +16,9 @@ import com.example.filmbookdiary.ui.screens.splash.SplashScreen
 @Composable
 fun DiaryNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchTextState: String
+
 ) {
     NavHost(
         navController = navController,
@@ -32,14 +35,16 @@ fun DiaryNavHost(
             FilmsScreen(
                 navigateToSingleFilm = { filmID ->
                     navController.navigateToSingleFilm(filmID.toString())
-                }
+                },
+                searchTextState = searchTextState
             )
         }
         composable(route = Books.route) {
             BooksScreen(
                 navigateToSingleElement = { bookID ->
                     navController.navigateToSingleBook(bookID.toString())
-                }
+                },
+                searchTextState = searchTextState
             )
         }
         composable(route = Profile.route) {

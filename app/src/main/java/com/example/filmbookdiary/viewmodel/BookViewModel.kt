@@ -3,7 +3,9 @@ package com.example.filmbookdiary.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmbookdiary.data.Book
+import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.repositories.BookRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,6 +34,10 @@ class BookViewModel: ViewModel() {
 
     suspend fun removeAllBooks() {
         bookRepository.removeAllBooks()
+    }
+
+    fun searchBooksByName(name: String): Flow<List<Book>> {
+        return bookRepository.searchBooksByName(name)
     }
 
     init {

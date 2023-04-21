@@ -2,6 +2,7 @@ package com.example.filmbookdiary.database
 
 import androidx.room.*
 import com.example.filmbookdiary.data.Book
+import com.example.filmbookdiary.data.Film
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
@@ -26,4 +27,6 @@ interface BookDao {
     @Update
     suspend fun updateBook(book: Book)
 
+    @Query("SELECT * FROM books WHERE name LIKE '%' || :bookName || '%'")
+    fun searchBooksByName(bookName: String): Flow<List<Book>>
 }

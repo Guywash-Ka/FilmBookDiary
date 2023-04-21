@@ -23,9 +23,17 @@ import java.util.*
 fun FilmsScreen(
     modifier: Modifier = Modifier,
     filmViewModel: FilmViewModel = viewModel(),
-    navigateToSingleFilm: (UUID) -> Unit = {}
+    navigateToSingleFilm: (UUID) -> Unit = {},
+    searchTextState: String
 ) {
-    val filmsList = filmViewModel.films.collectAsState(emptyList()).value
+
+
+//    val filmsList = filmViewModel.films.collectAsState(emptyList()).value
+    val filmsList = if (searchTextState == "") {
+        filmViewModel.films.collectAsState(emptyList()).value
+    } else {
+        filmViewModel.searchFilmsByName(searchTextState).collectAsState(emptyList()).value
+    }
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize(1f)) {
         FilmList(

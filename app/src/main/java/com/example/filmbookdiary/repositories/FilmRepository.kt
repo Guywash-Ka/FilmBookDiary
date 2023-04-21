@@ -44,6 +44,8 @@ class FilmRepository private constructor(
         }
     }
 
+    fun searchFilmsByName(name: String): Flow<List<Film>> = database.filmDao().searchFilmsByName(name)
+
     companion object {
         private var INSTANCE: FilmRepository? = null
 

@@ -25,9 +25,16 @@ import java.util.*
 fun BooksScreen(
     modifier: Modifier = Modifier,
     bookViewModel: BookViewModel = viewModel(),
-    navigateToSingleElement: (UUID) -> Unit = {}
+    navigateToSingleElement: (UUID) -> Unit = {},
+    searchTextState: String
 ) {
-    val booksList = bookViewModel.books.collectAsState(emptyList()).value
+//    val booksList = bookViewModel.books.collectAsState(emptyList()).value
+    val booksList = if (searchTextState == "") {
+        bookViewModel.books.collectAsState(emptyList()).value
+    } else {
+        bookViewModel.searchBooksByName(searchTextState).collectAsState(emptyList()).value
+    }
+
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize(1f)) {
         BookList(
