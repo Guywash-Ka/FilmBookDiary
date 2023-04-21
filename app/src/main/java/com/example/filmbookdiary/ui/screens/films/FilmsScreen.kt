@@ -30,9 +30,9 @@ fun FilmsScreen(
 
 //    val filmsList = filmViewModel.films.collectAsState(emptyList()).value
     val filmsList = if (searchTextState == "") {
-        filmViewModel.films.collectAsState(emptyList()).value
+        filmViewModel.films.collectAsState(emptyList()).value.reversed()
     } else {
-        filmViewModel.searchFilmsByName(searchTextState).collectAsState(emptyList()).value
+        filmViewModel.searchFilmsByName(searchTextState).collectAsState(emptyList()).value.reversed()
     }
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize(1f)) {

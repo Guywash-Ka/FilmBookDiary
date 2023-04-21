@@ -30,9 +30,9 @@ fun BooksScreen(
 ) {
 //    val booksList = bookViewModel.books.collectAsState(emptyList()).value
     val booksList = if (searchTextState == "") {
-        bookViewModel.books.collectAsState(emptyList()).value
+        bookViewModel.books.collectAsState(emptyList()).value.reversed()
     } else {
-        bookViewModel.searchBooksByName(searchTextState).collectAsState(emptyList()).value
+        bookViewModel.searchBooksByName(searchTextState).collectAsState(emptyList()).value.reversed()
     }
 
     val coroutineScope = rememberCoroutineScope()
