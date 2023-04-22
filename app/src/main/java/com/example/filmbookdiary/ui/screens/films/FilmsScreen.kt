@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.database.FilterState
+import com.example.filmbookdiary.data.FilterState
 import com.example.filmbookdiary.ui.components.FilmList
 import com.example.filmbookdiary.viewmodel.FilmViewModel
 import kotlinx.coroutines.launch
@@ -54,7 +53,7 @@ fun FilmsScreen(
                 var newUUID: UUID
                 coroutineScope.launch {
                     newUUID = UUID.randomUUID()
-                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", null))
+                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", null, true))
                     navigateToSingleFilm(newUUID)
                 }
             },

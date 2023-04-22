@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.filmbookdiary.data.WidgetState
-import com.example.filmbookdiary.database.FilterState
+import com.example.filmbookdiary.data.FilterState
 
 class TopBarViewModel: ViewModel() {
 

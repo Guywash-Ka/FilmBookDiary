@@ -46,6 +46,7 @@ fun SingleFilmScreen(
     val filmImageUri = film?.imageUri
     val filmDescription = film?.description
     val filmRating = film?.rating
+    val filmIsWatched = film?.isWatched
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -100,7 +101,8 @@ fun SingleFilmScreen(
                     modifier = modifier,
                     filmName = filmName,
                     filmRating = filmRating,
-                    filmDescription = filmDescription
+                    filmDescription = filmDescription,
+                    filmIsWatched = filmIsWatched,
                 )
             }
 
@@ -183,7 +185,8 @@ fun ShowFilmScreen(
     modifier: Modifier,
     filmName: String?,
     filmRating: Int?,
-    filmDescription: String?
+    filmDescription: String?,
+    filmIsWatched: Boolean?,
 ) {
     filmName?.let {
         Text(
@@ -206,6 +209,16 @@ fun ShowFilmScreen(
         Text(
             modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
             text = filmDescription,
+        )
+    }
+
+    filmIsWatched?.let {
+        Text(text = if (filmIsWatched) {
+            "Просмотрено!"
+        } else {
+            "Надо посмотреть!"
+        },
+            style = MaterialTheme.typography.h4
         )
     }
 }

@@ -13,11 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.filmbookdiary.data.WidgetState
-import com.example.filmbookdiary.database.FilterState
 import com.example.filmbookdiary.nav.*
 import com.example.filmbookdiary.ui.components.DiaryTabRow
 import com.example.filmbookdiary.ui.components.MainAppBar
-import com.example.filmbookdiary.ui.screens.films.SingleFilmScreen
 import com.example.filmbookdiary.ui.theme.FilmBookDiaryTheme
 import com.example.filmbookdiary.viewmodel.TopBarViewModel
 import java.util.*

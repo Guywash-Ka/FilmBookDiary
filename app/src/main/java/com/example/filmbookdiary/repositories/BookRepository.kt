@@ -7,6 +7,7 @@ import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.database.FilmBookDatabase
 import com.example.filmbookdiary.database.migration_1_2
 import com.example.filmbookdiary.database.migration_2_3
+import com.example.filmbookdiary.database.migration_3_4
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,7 @@ class BookRepository private constructor(
         )
         .addMigrations(migration_1_2)
         .addMigrations(migration_2_3)
+        .addMigrations(migration_3_4)
         .build()
 
     fun getBooks(): Flow<List<Book>> = database.bookDao().getBooks()

@@ -1,6 +1,5 @@
 package com.example.filmbookdiary.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -21,8 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.WidgetState
-import com.example.filmbookdiary.database.FilterState
-import com.example.filmbookdiary.ui.theme.backgroundColor
+import com.example.filmbookdiary.data.FilterState
 
 @Composable
 fun MainAppBar(
@@ -113,9 +111,12 @@ fun DefaultAppBar(
         )
         if (filterWidgetState == WidgetState.OPENED)
         Row(Modifier.fillMaxWidth().background(color = colors.primary), horizontalArrangement = Arrangement.SpaceEvenly) {
-            TextButton(content = { Text("Name", color = Color.White) }, onClick = { onFilterSelectClicked(FilterState.NAME) })
-            TextButton(content = { Text("Date", color = Color.White) }, onClick = { onFilterSelectClicked(FilterState.DATE) })
-            TextButton(content = { Text("Rating", color = Color.White) }, onClick = { onFilterSelectClicked(FilterState.RATING) })
+            TextButton(content = { Text("Name", color = Color.White) }, onClick = { onFilterSelectClicked(
+                FilterState.NAME) })
+            TextButton(content = { Text("Date", color = Color.White) }, onClick = { onFilterSelectClicked(
+                FilterState.DATE) })
+            TextButton(content = { Text("Rating", color = Color.White) }, onClick = { onFilterSelectClicked(
+                FilterState.RATING) })
         }
     }
 }

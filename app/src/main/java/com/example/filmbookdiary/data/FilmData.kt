@@ -11,6 +11,7 @@ data class Film(
     val imageUri: Uri,
     val name: String,
     val description: String,
-    val rating: Int?
+    val rating: Int?,
+    val isWatched: Boolean
 )
 

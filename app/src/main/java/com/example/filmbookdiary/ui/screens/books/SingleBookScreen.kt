@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +51,7 @@ fun SingleBookScreen(
     val bookImageUri = book?.imageUri
     val bookDescription = book?.description
     val bookRating = book?.rating
+    val bookIsRead = book?.isRead
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -106,6 +109,7 @@ fun SingleBookScreen(
                     bookAuthor = bookAuthor,
                     bookDescription = bookDescription,
                     bookRating = bookRating,
+                    bookIsRead = bookIsRead
                 )
             }
 
@@ -210,7 +214,8 @@ fun ShowBookScreen(
     bookName: String?,
     bookAuthor: String?,
     bookRating: Int?,
-    bookDescription: String?
+    bookDescription: String?,
+    bookIsRead: Boolean?
 ) {
     bookName?.let {
         Text(
@@ -241,6 +246,16 @@ fun ShowBookScreen(
         Text(
             modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
             text = bookDescription,
+        )
+    }
+
+    bookIsRead?.let {
+        Text(text = if (bookIsRead) {
+            "Прочитано!"
+        } else {
+            "Непрочитано!"
+        },
+            style = typography.h4
         )
     }
 }

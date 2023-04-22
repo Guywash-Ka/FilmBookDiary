@@ -1,4 +1,4 @@
-package com.example.filmbookdiary.database
+package com.example.filmbookdiary.data
 
 enum class FilterState {
     NAME,
