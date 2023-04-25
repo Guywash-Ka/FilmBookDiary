@@ -1,5 +1,6 @@
 package com.example.filmbookdiary.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,13 +15,17 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.data.FilterState
+import com.example.filmbookdiary.ui.theme.secondaryTextColor
+import com.example.filmbookdiary.ui.theme.textColor
 
 @Composable
 fun MainAppBar(
@@ -76,6 +81,9 @@ fun DefaultAppBar(
                     text = title
                 )
             },
+            elevation = 0.dp,
+            backgroundColor = colors.background,
+            contentColor = colors.background,
             actions = {
                 IconButton(
                     onClick = { onSearchClicked() }
@@ -83,7 +91,7 @@ fun DefaultAppBar(
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Search Icon",
-                        tint = Color.White
+                        tint = secondaryTextColor
                     )
                 }
                 when (filterWidgetState) {
@@ -92,7 +100,7 @@ fun DefaultAppBar(
                             Icon(
                                 imageVector = Icons.Filled.List,
                                 contentDescription = "Filter Icon",
-                                tint = Color.White
+                                tint = secondaryTextColor
                             )
                         }
                     }
@@ -101,7 +109,7 @@ fun DefaultAppBar(
                             Icon(
                                 imageVector = Icons.Filled.Clear,
                                 contentDescription = "Close Icon",
-                                tint = Color.White
+                                tint = secondaryTextColor
                             )
                         }
                     }
@@ -110,13 +118,28 @@ fun DefaultAppBar(
             }
         )
         if (filterWidgetState == WidgetState.OPENED)
-        Row(Modifier.fillMaxWidth().background(color = colors.primary), horizontalArrangement = Arrangement.SpaceEvenly) {
-            TextButton(content = { Text("Name", color = Color.White) }, onClick = { onFilterSelectClicked(
+        Row(Modifier.fillMaxWidth().background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
+            TextButton(content = { Text("Name", color = textColor) }, onClick = { onFilterSelectClicked(
                 FilterState.NAME) })
-            TextButton(content = { Text("Date", color = Color.White) }, onClick = { onFilterSelectClicked(
+            TextButton(content = { Text("Date", color = textColor) }, onClick = { onFilterSelectClicked(
                 FilterState.DATE) })
-            TextButton(content = { Text("Rating", color = Color.White) }, onClick = { onFilterSelectClicked(
+            TextButton(content = { Text("Rating", color = textColor) }, onClick = { onFilterSelectClicked(
                 FilterState.RATING) })
+        }
+        Canvas(modifier = Modifier.fillMaxWidth(1f)) {
+
+            // Fetching width and height for
+            // setting start x and end y
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+
+            // drawing a line between start(x,y) and end(x,y)
+            drawLine(
+                start = Offset(x = 60f, y = 0f),
+                end = Offset(x = canvasWidth - 60, y = 0f),
+                color = Color.White,
+                strokeWidth = 4F
+            )
         }
     }
 }
@@ -133,7 +156,7 @@ fun SearchAppBar(
             .fillMaxWidth()
             .height(56.dp),
         elevation = AppBarDefaults.TopAppBarElevation,
-        color = colors.primary
+        color = colors.background
     ) {
         TextField(modifier = Modifier
             .fillMaxWidth(),
@@ -146,7 +169,7 @@ fun SearchAppBar(
                     modifier = Modifier
                         .alpha(ContentAlpha.medium),
                     text = "Search here...",
-                    color = Color.White
+                    color = textColor
                 )
             },
             textStyle = TextStyle(
@@ -162,7 +185,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon",
-                        tint = Color.White
+                        tint = secondaryTextColor
                     )
                 }
             },
@@ -179,7 +202,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close Icon",
-                        tint = Color.White
+                        tint = secondaryTextColor
                     )
                 }
             },
@@ -193,7 +216,7 @@ fun SearchAppBar(
             ),
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
-                cursorColor = Color.White.copy(alpha = ContentAlpha.medium)
+                cursorColor = textColor.copy(alpha = ContentAlpha.medium)
             ))
     }
 }

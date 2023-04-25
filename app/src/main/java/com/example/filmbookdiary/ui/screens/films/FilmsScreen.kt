@@ -46,7 +46,7 @@ fun FilmsScreen(
             modifier = modifier,
             films = filmsList,
             onFilmClicked = navigateToSingleFilm,
-            filmViewModel = filmViewModel
+//            filmViewModel = filmViewModel
         )
         FloatingActionButton(
             onClick = {

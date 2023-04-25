@@ -1,4 +1,4 @@
-package com.example.filmbookdiary.repositories
+package com.example.filmbookdiary.nav.repositories
 
 import android.content.Context
 import androidx.room.Room

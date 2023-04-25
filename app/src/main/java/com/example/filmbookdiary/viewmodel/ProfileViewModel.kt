@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.data.Film
-import com.example.filmbookdiary.repositories.BookRepository
-import com.example.filmbookdiary.repositories.FilmRepository
+import com.example.filmbookdiary.nav.repositories.BookRepository
+import com.example.filmbookdiary.nav.repositories.FilmRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

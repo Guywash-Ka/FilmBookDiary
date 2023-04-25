@@ -34,66 +34,73 @@ fun FilmPage(
     filmDescription: String,
     filmRating: Int?,
     onFilmClicked: (UUID) -> Unit,
-    filmViewModel: FilmViewModel
+//    filmViewModel: FilmViewModel
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    Card(
-        shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
-        elevation = 10.dp,
-        modifier = modifier.clickable { onFilmClicked(filmID) }
-    ) {
-        Column(modifier = modifier.background(color = colors.primary)) {
-            Box(contentAlignment = Alignment.TopEnd) {
-                GlideImage(
-                    imageModel = { filmImageUri },
-                    modifier = modifier.height(280.dp)
-                )
-                IconButton(onClick = {
-                    coroutineScope.launch {
-                        filmViewModel.removeFilm(filmViewModel.getFilm(filmID))
-                    }
-                }) {
-                    Icon(
-                        Icons.Filled.Clear,
-                        contentDescription = "Remove element",
-                        tint = colors.onPrimary
-                    )
-                }
-            }
-            Row(
-                modifier = modifier.fillMaxWidth(1f),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column() {
-                    Text(
-                        modifier = modifier.padding(start = 8.dp),
-                        fontWeight = FontWeight.ExtraBold,
-                        text = filmName,
-                        style = typography.h4,
-                        color = colors.onPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
-                        text = filmDescription,
-                        color = colors.onPrimary,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                if (filmRating != null) {
-                    Text(
-                        text = "$filmRating/10",
-                        fontWeight = FontWeight.ExtraBold,
-                        style = typography.h4,
-                        color = colors.onPrimary
-                    )
-                }
-            }
-        }
-    }
+    FilmCard(
+        modifier = modifier,
+        filmID = filmID,
+        filmImageUri = filmImageUri,
+        filmName = filmName,
+        filmDescription = filmDescription,
+        filmRating = filmRating,
+        onFilmClicked = onFilmClicked
+    )
+//    Card(
+//        shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
+//        elevation = 10.dp,
+//        modifier = modifier.clickable { onFilmClicked(filmID) }
+//    ) {
+//        Column(modifier = modifier.background(color = colors.primary)) {
+//            Box(contentAlignment = Alignment.TopEnd) {
+//                GlideImage(
+//                    imageModel = { filmImageUri },
+//                    modifier = modifier.height(280.dp)
+//                )
+////                IconButton(onClick = {
+////                    coroutineScope.launch {
+////                        filmViewModel.removeFilm(filmViewModel.getFilm(filmID))
+////                    }
+////                }) {
+////                    Icon(
+////                        Icons.Filled.Clear,
+////                        contentDescription = "Remove element",
+////                        tint = colors.onPrimary
+////                    )
+////                }
+//            }
+//            Row(
+//                modifier = modifier.fillMaxWidth(1f),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                Column() {
+//                    Text(
+//                        modifier = modifier.padding(start = 8.dp),
+//                        fontWeight = FontWeight.ExtraBold,
+//                        text = filmName,
+//                        style = typography.h4,
+//                        color = colors.onPrimary,
+//                        maxLines = 1,
+//                        overflow = TextOverflow.Ellipsis
+//                    )
+//                    Text(
+//                        modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
+//                        text = filmDescription,
+//                        color = colors.onPrimary,
+//                        maxLines = 2,
+//                        overflow = TextOverflow.Ellipsis
+//                    )
+//                }
+//                if (filmRating != null) {
+//                    Text(
+//                        text = "$filmRating/10",
+//                        fontWeight = FontWeight.ExtraBold,
+//                        style = typography.h4,
+//                        color = colors.onPrimary
+//                    )
+//                }
+//            }
+//        }
+//    }
 }
 
 @Composable
@@ -101,9 +108,9 @@ fun FilmList(
     modifier: Modifier,
     films: List<Film>,
     onFilmClicked: (UUID) -> Unit,
-    filmViewModel: FilmViewModel
+//    filmViewModel: FilmViewModel
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(all = 8.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(all = 10.dp)) {
         items(
             items = films,
             itemContent = {
@@ -114,7 +121,7 @@ fun FilmList(
                     filmDescription = it.description,
                     filmRating = it.rating,
                     onFilmClicked = onFilmClicked,
-                    filmViewModel = filmViewModel
+//                    filmViewModel = filmViewModel
                 )
             },
         )
