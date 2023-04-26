@@ -47,6 +47,7 @@ fun FilmCard(
     filmDescription: String,
     filmRating: Int?,
     filmAuthor: String?,
+    filmEmoji: String,
     onFilmClicked: (UUID) -> Unit,
 //    filmViewModel: FilmViewModel
 ) {
@@ -91,7 +92,7 @@ fun FilmCard(
                     fontSize = 20.sp,
                     color = textColor
                 )
-                Text(text = "\uD83D\uDE0E", fontSize = 20.sp)
+                Text(text = filmEmoji, fontSize = 20.sp)
             }
             Text(
                 text = filmDescription,
@@ -157,6 +158,7 @@ fun FilmCardPreview() {
         filmDescription = "Some film description that will be interesting to everyone",
         filmRating = 7,
         filmAuthor = "J.K. Rowling",
+        filmEmoji = "🤠",
         onFilmClicked = {}
     )
 }

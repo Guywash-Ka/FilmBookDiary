@@ -69,6 +69,7 @@ fun SingleFilmScreen(
     val filmRating = film?.rating
     val filmIsWatched = film?.isWatched
     val filmAuthor = film?.author
+    val filmEmoji = film?.emoji
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -93,6 +94,12 @@ fun SingleFilmScreen(
     fun updateFilmIsWatched(isWatched: Boolean) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(isWatched = isWatched)
+        }
+    }
+
+    fun updateFilmEmoji(emoji: String) {
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(emoji = emoji)
         }
     }
 
@@ -129,6 +136,7 @@ fun SingleFilmScreen(
                     filmAuthor = filmAuthor,
                     filmDescription = filmDescription,
                     filmRating = filmRating,
+                    filmEmoji = filmEmoji,
                     singleFilmViewModel = singleFilmViewModel,
                     isEdited = isEdited,
                 )
@@ -140,9 +148,11 @@ fun SingleFilmScreen(
                     filmDescription = filmDescription,
                     filmAuthor = filmAuthor,
                     filmIsWatched = filmIsWatched,
+                    filmEmoji = filmEmoji,
                     sheetState = sheetState,
                     isEdited = isEdited,
                     updateFilm = ::updateFilmIsWatched,
+                    updateEmoji = ::updateFilmEmoji
                 )
             }
         }
@@ -155,6 +165,7 @@ fun EditFilmScreen(
     filmAuthor: String?,
     filmDescription: String?,
     filmRating: Int?,
+    filmEmoji: String?,
     singleFilmViewModel: SingleFilmViewModel,
     isEdited: MutableState<Boolean>,
 ) {
@@ -224,9 +235,11 @@ fun ShowFilmScreen(
     filmDescription: String?,
     filmAuthor: String?,
     filmIsWatched: Boolean?,
+    filmEmoji: String?,
     sheetState: ModalBottomSheetState,
     isEdited: MutableState<Boolean>,
-    updateFilm: KFunction1<Boolean, Unit>
+    updateFilm: KFunction1<Boolean, Unit>,
+    updateEmoji: KFunction1<String, Unit>,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -350,7 +363,7 @@ fun ShowFilmScreen(
                 }
                     }
             ) {
-                Text(text = "\uD83D\uDE0E", fontSize = 20.sp, modifier = modifier)
+                Text(text = filmEmoji ?: "\uD83D\uDE34", fontSize = 20.sp, modifier = modifier)
             }
             IconButton(onClick = {
                 isEdited.value = !isEdited.value
@@ -364,7 +377,8 @@ fun ShowFilmScreen(
                 items(emojiList) {emoji ->
                     TextButton(
                         onClick = {
-                                      emojiRowState.value = WidgetState.CLOSED
+                            emojiRowState.value = WidgetState.CLOSED
+                            updateEmoji(emoji)
                                   },
                         modifier = modifier.padding(5.dp)
                     ) {
@@ -408,6 +422,8 @@ fun ShowFilmScreen(
 fun ShowFilmScreenPreview() {
     fun someFun(boolArg: Boolean) {
     }
+    fun someFun2(stringArg: String) {
+    }
 
     ShowFilmScreen(
         modifier = Modifier,
@@ -416,8 +432,10 @@ fun ShowFilmScreenPreview() {
         filmDescription = "Very cool film",
         filmAuthor = "Film Author",
         filmIsWatched = false,
+        filmEmoji = "\uD83D\uDE0E",
         sheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
         isEdited = mutableStateOf(false),
-        updateFilm = ::someFun
+        updateFilm = ::someFun,
+        updateEmoji = ::someFun2,
     )
 }

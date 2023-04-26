@@ -34,6 +34,7 @@ fun FilmPage(
     filmDescription: String,
     filmRating: Int?,
     filmAuthor: String?,
+    filmEmoji: String,
     onFilmClicked: (UUID) -> Unit,
 //    filmViewModel: FilmViewModel
 ) {
@@ -45,6 +46,7 @@ fun FilmPage(
         filmDescription = filmDescription,
         filmRating = filmRating,
         filmAuthor = filmAuthor,
+        filmEmoji = filmEmoji,
         onFilmClicked = onFilmClicked
     )
 //    Card(
@@ -123,6 +125,7 @@ fun FilmList(
                     filmDescription = it.description,
                     filmRating = it.rating,
                     filmAuthor = it.author,
+                    filmEmoji = it.emoji,
                     onFilmClicked = onFilmClicked,
 //                    filmViewModel = filmViewModel
                 )
