@@ -1,9 +1,8 @@
-package com.example.filmbookdiary.nav.repositories
+package com.example.filmbookdiary.repositories
 
 import android.content.Context
 import androidx.room.Room
 import com.example.filmbookdiary.data.Book
-import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.database.FilmBookDatabase
 import com.example.filmbookdiary.database.migration_1_2
 import com.example.filmbookdiary.database.migration_2_3

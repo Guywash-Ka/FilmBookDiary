@@ -41,7 +41,7 @@ fun CardProgressBarPreview(
     CardProgressBar(
         modifier = Modifier.clip(shape = RoundedCornerShape(4.dp)).height(8.dp),
         width = 300.dp,
-        foregroundColor = Brush.horizontalGradient(listOf(Color(0xFF02C39A), Color(0xffF0F3BD))),
+        foregroundColor = Brush.horizontalGradient(listOf(Color(0xFFFF80CE), Color(0xff02C39A))),
         percent = 75,
     )
 }

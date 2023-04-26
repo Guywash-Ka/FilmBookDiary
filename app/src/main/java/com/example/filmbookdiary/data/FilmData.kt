@@ -12,6 +12,7 @@ data class Film(
     val name: String,
     val description: String,
     val rating: Int?,
-    val isWatched: Boolean
+    val isWatched: Boolean,
+    val author: String?,
 )
 

@@ -46,7 +46,7 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
         val filterSelectState by topBarViewModel.filterSelectState
         Scaffold(
             topBar = {
-                if (currentScreen != Splash) {
+                if (diaryTabRowScreens.contains(currentScreen)) {
                     MainAppBar(
                         title = currentScreen.route.replaceFirstChar {// Capitalize
                             if (it.isLowerCase()) it.titlecase(
@@ -80,7 +80,7 @@ fun DiaryApp(topBarViewModel: TopBarViewModel) {
                 }
             },
             bottomBar = {
-                if (currentScreen != Splash) {
+                if (diaryTabRowScreens.contains(currentScreen)) {
                     DiaryTabRow(
                         allScreens = diaryTabRowScreens,
                         onTabSelected = { newScreen ->

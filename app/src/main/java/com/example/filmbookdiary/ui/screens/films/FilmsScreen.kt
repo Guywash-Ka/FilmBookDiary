@@ -53,7 +53,7 @@ fun FilmsScreen(
                 var newUUID: UUID
                 coroutineScope.launch {
                     newUUID = UUID.randomUUID()
-                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", null, true))
+                    filmViewModel.addFilm(Film(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Film", "Very cool film", null, true, "Author name"))
                     navigateToSingleFilm(newUUID)
                 }
             },
