@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.data.Film
 
-@Database(entities = [ Film::class, Book::class ], version = 5)
+@Database(entities = [ Film::class, Book::class ], version = 6)
 @TypeConverters(FBTypeConverters::class)
 abstract class FilmBookDatabase: RoomDatabase() {
     abstract fun filmDao(): FilmDao
@@ -37,5 +37,11 @@ val migration_3_4 = object : Migration(3, 4) {
 val migration_4_5 = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE films ADD COLUMN author TEXT")
+    }
+}
+
+val migration_5_6 = object : Migration(5, 6) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE films ADD COLUMN emoji TEXT NOT NULL DEFAULT '\uD83D\uDE0E'")
     }
 }

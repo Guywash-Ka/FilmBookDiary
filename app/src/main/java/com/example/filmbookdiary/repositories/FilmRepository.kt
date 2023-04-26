@@ -26,6 +26,7 @@ class FilmRepository private constructor(
         .addMigrations(migration_2_3)
         .addMigrations(migration_3_4)
         .addMigrations(migration_4_5)
+        .addMigrations(migration_5_6)
         .build()
 
     fun getFilms(): Flow<List<Film>> = database.filmDao().getFilms()

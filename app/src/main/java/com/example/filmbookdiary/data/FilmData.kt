@@ -14,5 +14,6 @@ data class Film(
     val rating: Int?,
     val isWatched: Boolean,
     val author: String?,
+    val emoji: String,
 )
 
