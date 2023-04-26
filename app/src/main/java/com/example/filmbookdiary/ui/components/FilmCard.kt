@@ -46,6 +46,7 @@ fun FilmCard(
     filmName: String,
     filmDescription: String,
     filmRating: Int?,
+    filmAuthor: String?,
     onFilmClicked: (UUID) -> Unit,
 //    filmViewModel: FilmViewModel
 ) {
@@ -103,21 +104,23 @@ fun FilmCard(
             Row( verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier.padding(start = 10.dp, end = 80.dp)
             ){
-                Icon(
-                    imageVector = Icons.Rounded.Person,
-                    contentDescription = "Author icon",
-                    modifier = modifier
-                        .width(24.dp)
-                        .height(24.dp),
-                    tint = secondaryTextColor
-                )
+                if (filmAuthor != null) {
+                    Icon(
+                        imageVector = Icons.Rounded.Person,
+                        contentDescription = "Author icon",
+                        modifier = modifier
+                            .width(24.dp)
+                            .height(24.dp),
+                        tint = secondaryTextColor
+                    )
 
-                Text(
-                    text = "Николас Виндинг Рефн",
-                    fontWeight = FontWeight(600),
-                    fontSize = 16.sp,
-                    color = secondaryTextColor
-                )
+                    Text(
+                        text = filmAuthor,
+                        fontWeight = FontWeight(600),
+                        fontSize = 16.sp,
+                        color = secondaryTextColor
+                    )
+                }
             }
 //            LinearProgressIndicator(
 //                progress = 75f,
@@ -153,6 +156,7 @@ fun FilmCardPreview() {
         filmName = "Drive",
         filmDescription = "Some film description that will be interesting to everyone",
         filmRating = 7,
+        filmAuthor = "J.K. Rowling",
         onFilmClicked = {}
     )
 }
