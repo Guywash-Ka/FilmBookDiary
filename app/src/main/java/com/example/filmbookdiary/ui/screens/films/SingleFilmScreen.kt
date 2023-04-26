@@ -230,7 +230,7 @@ fun ShowFilmScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val emojiRowState = remember { mutableStateOf(WidgetState.OPENED) }
+    val emojiRowState = remember { mutableStateOf(WidgetState.CLOSED) }
     val emojiList = listOf("😎", "😂", "😡", "🤠", "😭", "❤", "😴", "😱", "💔", "🔫", "🧟", "🤡")
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -342,7 +342,16 @@ fun ShowFilmScreen(
                     )
                 }
             }
-            Text(text = "\uD83D\uDE0E", fontSize = 20.sp, modifier = modifier)
+            TextButton(
+                onClick = { if (emojiRowState.value == WidgetState.CLOSED) {
+                    emojiRowState.value = WidgetState.OPENED
+                } else {
+                    emojiRowState.value = WidgetState.CLOSED
+                }
+                    }
+            ) {
+                Text(text = "\uD83D\uDE0E", fontSize = 20.sp, modifier = modifier)
+            }
             IconButton(onClick = {
                 isEdited.value = !isEdited.value
             }) {
@@ -354,7 +363,9 @@ fun ShowFilmScreen(
             LazyRow() {
                 items(emojiList) {emoji ->
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                                      emojiRowState.value = WidgetState.CLOSED
+                                  },
                         modifier = modifier.padding(5.dp)
                     ) {
                         Text(text = emoji, fontSize = 24.sp)
