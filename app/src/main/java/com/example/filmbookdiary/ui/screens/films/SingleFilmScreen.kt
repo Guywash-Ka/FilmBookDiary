@@ -343,9 +343,9 @@ fun ShowFilmScreen(
                                 text = "$filmRating",
                                 fontSize = 20.sp,
                                 color = when(filmRating){
-                                    in 1..4 -> Color(0xFFE91E63)
-                                    in 6..7 -> Color(0xFFFF9800)
-                                    else -> Color(0xFF37993B)
+                                    in 1..4 -> Color(0xFFFF80CE)
+                                    in 5..7 -> Color(0xFFFEC404)
+                                    else -> Color(0xFF71C98D)
                                 }
                             )
                         }
@@ -368,9 +368,9 @@ fun ShowFilmScreen(
                                 contentDescription = "Star Icon",
                                 tint = if (filmRating != null) {
                                     when(filmRating) {
-                                        in 1..4 -> Color(0xFFE91E63)
-                                        in 6..7 -> Color(0xFFFF9800)
-                                        else -> Color(0xFF37993B)
+                                        in 1..4 -> Color(0xFFFF80CE)
+                                        in 5..7 -> Color(0xFFFEC404)
+                                        else -> Color(0xFF71C98D)
                                     }
                                 } else {
                                     Color.Gray

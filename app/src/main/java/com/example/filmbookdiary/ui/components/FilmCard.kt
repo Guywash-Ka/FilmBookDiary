@@ -138,7 +138,7 @@ fun FilmCard(
                         .clip(shape = RoundedCornerShape(2.dp))
                         .height(8.dp),
                     width = LocalConfiguration.current.screenWidthDp.dp,
-                    foregroundColor = Brush.horizontalGradient(listOf(Color(0xFF02C39A), Color(0xffF0F3BD))),
+                    foregroundColor = Brush.horizontalGradient(listOf(Color(0xFFFF80CE), Color(0xFFFEC404), Color(0xFF71C98D))),
                     percent = 100 / maxRating * (filmRating?: 0),
                 )
             }
