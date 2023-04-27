@@ -1,6 +1,9 @@
 package com.example.filmbookdiary.ui.screens.films
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.Intent.createChooser
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
@@ -385,11 +389,6 @@ fun ShowFilmScreen(
                 ) {
                     Text(text = filmEmoji ?: "\uD83D\uDE34", fontSize = 20.sp, modifier = modifier)
                 }
-                IconButton(onClick = {
-                    isEdited.value = !isEdited.value
-                }) {
-                    Icon(imageVector = if (isEdited.value) Icons.Default.CheckCircle else Icons.Default.Edit, contentDescription = "oh yees")
-                }
             }
 
             if (emojiRowState.value == WidgetState.OPENED) {
@@ -405,6 +404,25 @@ fun ShowFilmScreen(
                             Text(text = emoji, fontSize = 24.sp)
                         }
                     }
+                }
+            }
+
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                IconButton(onClick = {
+                    val message = """
+                        Очень рекомендую посмотреть фильм "$filmName"!
+                        
+                        ${if (filmRating != null) "Я оценил его на $filmRating баллов" else ""}
+                    """.trimIndent()
+                    shareFilm(context, message)
+                }) {
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "Share", tint = Color.Gray)
+                }
+
+                IconButton(onClick = {
+                    isEdited.value = !isEdited.value
+                }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Icon", tint = Color.Gray)
                 }
             }
 
@@ -459,4 +477,12 @@ fun ShowFilmScreenPreview() {
         updateFilm = ::someFun,
         updateEmoji = ::someFun2,
     )
+}
+
+fun shareFilm(context: Context, message: String) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "message/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    startActivity(context,createChooser(intent, "Share film"),null)
 }
