@@ -13,5 +13,6 @@ data class Book(
     val author: String,
     val description: String,
     val rating: Int?,
-    val isRead: Boolean
+    val isRead: Boolean,
+    val emoji: String,
 )

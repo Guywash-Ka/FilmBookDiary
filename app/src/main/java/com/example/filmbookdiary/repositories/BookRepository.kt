@@ -3,10 +3,7 @@ package com.example.filmbookdiary.repositories
 import android.content.Context
 import androidx.room.Room
 import com.example.filmbookdiary.data.Book
-import com.example.filmbookdiary.database.FilmBookDatabase
-import com.example.filmbookdiary.database.migration_1_2
-import com.example.filmbookdiary.database.migration_2_3
-import com.example.filmbookdiary.database.migration_3_4
+import com.example.filmbookdiary.database.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +25,9 @@ class BookRepository private constructor(
         .addMigrations(migration_1_2)
         .addMigrations(migration_2_3)
         .addMigrations(migration_3_4)
+        .addMigrations(migration_4_5)
+        .addMigrations(migration_5_6)
+        .addMigrations(migration_6_7)
         .build()
 
     fun getBooks(): Flow<List<Book>> = database.bookDao().getBooks()
