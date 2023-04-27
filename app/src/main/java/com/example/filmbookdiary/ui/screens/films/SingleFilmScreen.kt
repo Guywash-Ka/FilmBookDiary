@@ -49,6 +49,7 @@ import kotlin.reflect.KFunction1
 fun SingleFilmScreen(
     modifier: Modifier = Modifier,
     filmID: String? = UUID.randomUUID().toString(),
+    navigateBack: () -> Unit,
     singleFilmViewModel: SingleFilmViewModel = viewModel(factory = SingFilmViewModelFactory(UUID.fromString(filmID))),
 ) {
     val isEdited = remember { mutableStateOf(false) }
@@ -135,11 +136,24 @@ fun SingleFilmScreen(
                     modifier = modifier
                 )
                 if (isEdited.value) {
-                    IconButton(
+                    FloatingActionButton(
                         onClick = { launcher.launch("image/*") },
-                        modifier = modifier.align(Alignment.BottomEnd))
+                        modifier = modifier.align(Alignment.BottomEnd).padding(6.dp).size(26.dp))
                     {
-                        Icon(Icons.Filled.Edit, contentDescription = "Change image")
+                        Icon(Icons.Filled.Edit, contentDescription = "Change image", Modifier.size(20.dp))
+                    }
+                    FloatingActionButton(
+                        onClick = {
+                            scope.launch {
+                                if (film != null) {
+                                    singleFilmViewModel.removeFilm(film)
+                                    navigateBack()
+                                }
+                            }
+                                  },
+                        modifier = modifier.align(Alignment.TopEnd).padding(6.dp).size(26.dp))
+                    {
+                        Icon(Icons.Filled.Clear, contentDescription = "Delete Film", Modifier.size(20.dp))
                     }
                 }
             }
@@ -409,12 +423,7 @@ fun ShowFilmScreen(
 
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 IconButton(onClick = {
-                    val message = """
-                        Очень рекомендую посмотреть фильм "$filmName"!
-                        
-                        ${if (filmRating != null) "Я оценил его на $filmRating баллов" else ""}
-                    """.trimIndent()
-                    shareFilm(context, message)
+                    shareFilm(context, filmName ?: " ", filmRating)
                 }) {
                     Icon(imageVector = Icons.Default.Share, contentDescription = "Share", tint = Color.Gray)
                 }
@@ -479,7 +488,12 @@ fun ShowFilmScreenPreview() {
     )
 }
 
-fun shareFilm(context: Context, message: String) {
+fun shareFilm(context: Context, filmName: String, filmRating: Int?) {
+    val message = """
+                        Очень рекомендую посмотреть фильм "$filmName"!
+                        
+                        ${if (filmRating != null) "Я оценил его на $filmRating баллов" else ""}
+                    """.trimIndent()
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "message/plain"
         putExtra(Intent.EXTRA_TEXT, message)

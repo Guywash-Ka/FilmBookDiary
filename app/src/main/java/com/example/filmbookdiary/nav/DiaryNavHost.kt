@@ -59,7 +59,12 @@ fun DiaryNavHost(
         ) { navBackStackEntry ->
             val filmID =
                 navBackStackEntry.arguments?.getString(SingleFilm.filmIDArg)
-            SingleFilmScreen(filmID = filmID)
+            SingleFilmScreen(
+                filmID = filmID,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
         }
         composable(
             route = SingleBook.routeWithArgs,

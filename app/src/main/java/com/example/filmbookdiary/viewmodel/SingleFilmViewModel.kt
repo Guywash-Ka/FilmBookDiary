@@ -32,6 +32,10 @@ class SingleFilmViewModel(filmId: UUID): ViewModel() {
         film.value?.let { filmRepository.updateFilm(it) }
     }
 
+    suspend fun removeFilm(film: Film) {
+        filmRepository.removeFilm(film)
+    }
+
     override fun onCleared() {
         super.onCleared()
         film.value?.let { filmRepository.updateFilm(it) }
