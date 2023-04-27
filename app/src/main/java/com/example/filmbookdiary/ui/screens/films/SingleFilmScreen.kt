@@ -1,7 +1,6 @@
 package com.example.filmbookdiary.ui.screens.films
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -12,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
@@ -20,22 +20,16 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
 import com.example.filmbookdiary.ui.components.SingleFilmPicture
@@ -85,7 +79,7 @@ fun SingleFilmScreen(
         ModalBottomSheetValue.Hidden
     )
 
-    fun updateFilm(rating: Int) {
+    fun updateFilmRating(rating: Int) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(rating = rating)
         }
@@ -102,11 +96,26 @@ fun SingleFilmScreen(
             oldFilm.copy(emoji = emoji)
         }
     }
+    fun updateFilmName(name: String) {
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(name = name)
+        }
+    }
+    fun updateFilmDescription(description: String) {
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(description = description)
+        }
+    }
+    fun updateFilmAuthor(author: String) {
+        singleFilmViewModel.updateFilm { oldFilm ->
+            oldFilm.copy(author = author)
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            RatingSelection(sheetState, ::updateFilm)
+            RatingSelection(sheetState, ::updateFilmRating)
         },
         sheetContentColor = colors.background,
         sheetBackgroundColor = colors.surface,
@@ -137,8 +146,10 @@ fun SingleFilmScreen(
                     filmDescription = filmDescription,
                     filmRating = filmRating,
                     filmEmoji = filmEmoji,
-                    singleFilmViewModel = singleFilmViewModel,
                     isEdited = isEdited,
+                    updateName = ::updateFilmName,
+                    updateDescription = ::updateFilmDescription,
+                    updateAuthor = ::updateFilmAuthor,
                 )
             } else {
                 ShowFilmScreen(
@@ -166,63 +177,68 @@ fun EditFilmScreen(
     filmDescription: String?,
     filmRating: Int?,
     filmEmoji: String?,
-    singleFilmViewModel: SingleFilmViewModel,
     isEdited: MutableState<Boolean>,
+    updateName: KFunction1<String, Unit>,
+    updateDescription: KFunction1<String, Unit>,
+    updateAuthor: KFunction1<String, Unit>,
 ) {
     var name by remember { mutableStateOf(filmName) }
     var author by remember { mutableStateOf(filmAuthor) }
     var description by remember { mutableStateOf(filmDescription) }
     var rating by remember { mutableStateOf(filmRating) }
+    Column(modifier = Modifier.fillMaxWidth(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+        name?.let {
+            TextField(
+                value = it,
+                onValueChange = { newNameText ->
+                    if (!newNameText.contains("\n")) {
+                        name = newNameText
+                        updateName(name ?: " ")
+                    } },
+                textStyle = TextStyle(
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 30.sp,
+                    color = textColor
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent
+                )
+            ) }
 
-    name?.let {
-        TextField(
-            value = it,
-            onValueChange = { newNameText ->
-                if (!newNameText.contains("\n")) {
-                    name = newNameText
-                    singleFilmViewModel.updateFilm { oldFilm ->
-                        oldFilm.copy(name = name!!)
-                    }
-                } },
-            textStyle = MaterialTheme.typography.body1,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent
-            )
-        ) }
-
-    OutlinedTextField(
-        value = if (author != null) { author!! } else { " " },
-        onValueChange = { newAuthor ->
-            author = newAuthor
-            singleFilmViewModel.updateFilm { oldFilm ->
-                oldFilm.copy(author = author!!)
-            }
-        },
-        singleLine = true,
-        label = { Text("Режиссер") }
-    )
-
-    description?.let {
         OutlinedTextField(
-            value = it,
-            onValueChange = { newDescriptionText ->
-                description = newDescriptionText
-                singleFilmViewModel.updateFilm { oldFilm ->
-                    oldFilm.copy(description = description!!)
-                }
+            modifier = Modifier.fillMaxWidth(1f),
+            value = if (author != null) { author!! } else { " " },
+            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Author") },
+            onValueChange = { newAuthor ->
+                author = newAuthor
+                updateAuthor(author ?: " ")
             },
-            label = { Text("Описание") }
+            singleLine = true,
+            label = { Text("Режиссер") }
         )
+
+        description?.let {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(1f),
+                value = it,
+                leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "info") },
+                onValueChange = { newDescriptionText ->
+                    description = newDescriptionText
+                    updateDescription(description ?: "")
+                },
+                label = { Text("Описание") }
+            )
+        }
     }
 
-    Button(onClick = {
+    IconButton(onClick = {
         isEdited.value = !isEdited.value
     }) {
-        Text(if (isEdited.value) "Save" else "Edit")
+        Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
     }
 }
 
@@ -245,172 +261,177 @@ fun ShowFilmScreen(
     val context = LocalContext.current
     val emojiRowState = remember { mutableStateOf(WidgetState.CLOSED) }
     val emojiList = listOf("😎", "😂", "😡", "🤠", "😭", "❤", "😴", "😱", "💔", "🔫", "🧟", "🤡")
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        filmName?.let {
-            Text(
-                modifier = modifier.padding(start = 8.dp, bottom = 16.dp),
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 30.sp,
-                text = filmName,
-                color = textColor
-            ) }
-        filmAuthor?.let {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Author Icon",
-                    tint = secondaryTextColor
-                )
+    Card(shape = RoundedCornerShape(10.dp)) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            filmName?.let {
                 Text(
-                    modifier = modifier.padding(start = 8.dp, bottom = 10.dp),
+                    modifier = modifier.padding(start = 8.dp, bottom = 16.dp),
                     fontWeight = FontWeight.ExtraBold,
-                    textAlign = TextAlign.Center,
-                    text = filmAuthor,
-                    color = secondaryTextColor,
+                    fontSize = 30.sp,
+                    text = filmName,
+                    color = textColor
+                ) }
+            filmAuthor?.let {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Author Icon",
+                        tint = secondaryTextColor
+                    )
+                    Text(
+                        modifier = modifier.padding(start = 8.dp),
+                        fontWeight = FontWeight.ExtraBold,
+                        textAlign = TextAlign.Center,
+                        text = filmAuthor,
+                        color = secondaryTextColor,
+                    )
+                }
+            }
+            Row(
+                modifier = modifier
+                    .fillMaxWidth(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                IconButton(onClick = {
+                    scope.launch {
+                        if (filmIsWatched == null || !filmIsWatched) {
+                            updateFilm(true)
+                        } else {
+                            updateFilm(false)
+                        }
+                    }
+                    Toast.makeText(
+                        context,
+                        if (filmIsWatched == null || !filmIsWatched) {
+                            "Фильм просмотрен!"
+                        } else {
+                            "Надо посмотреть!"
+                        },
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                    if (filmIsWatched == true){
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Icon check",
+                            tint = Color.Green
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Icon check",
+                            tint = Color.Red
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .height(24.dp)
+                        .padding(0.dp),
+                ) {
+                    Row() {
+                        filmRating?.let {
+                            Text(
+                                modifier = modifier.fillMaxHeight(1f),
+//                        textAlign = TextAlign.Justify,
+                                fontWeight = FontWeight.ExtraBold,
+                                text = "$filmRating",
+                                fontSize = 20.sp,
+                                color = when(filmRating){
+                                    in 1..4 -> Color(0xFFE91E63)
+                                    in 6..7 -> Color(0xFFFF9800)
+                                    else -> Color(0xFF37993B)
+                                }
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    if (!sheetState.isVisible) {
+                                        sheetState.show()
+                                    } else {
+                                        sheetState.hide()
+                                    }
+                                }
+                            },
+                            modifier = modifier,
+                        )
+                        {
+                            Icon(
+                                modifier = modifier,
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = "Star Icon",
+                                tint = if (filmRating != null) {
+                                    when(filmRating) {
+                                        in 1..4 -> Color(0xFFE91E63)
+                                        in 6..7 -> Color(0xFFFF9800)
+                                        else -> Color(0xFF37993B)
+                                    }
+                                } else {
+                                    Color.Gray
+                                }
+                            )
+                        }
+                    }
+                }
+                TextButton(
+                    onClick = { if (emojiRowState.value == WidgetState.CLOSED) {
+                        emojiRowState.value = WidgetState.OPENED
+                    } else {
+                        emojiRowState.value = WidgetState.CLOSED
+                    }
+                    }
+                ) {
+                    Text(text = filmEmoji ?: "\uD83D\uDE34", fontSize = 20.sp, modifier = modifier)
+                }
+                IconButton(onClick = {
+                    isEdited.value = !isEdited.value
+                }) {
+                    Icon(imageVector = if (isEdited.value) Icons.Default.CheckCircle else Icons.Default.Edit, contentDescription = "oh yees")
+                }
+            }
+
+            if (emojiRowState.value == WidgetState.OPENED) {
+                LazyRow() {
+                    items(emojiList) {emoji ->
+                        TextButton(
+                            onClick = {
+                                emojiRowState.value = WidgetState.CLOSED
+                                updateEmoji(emoji)
+                            },
+                            modifier = modifier.padding(5.dp)
+                        ) {
+                            Text(text = emoji, fontSize = 24.sp)
+                        }
+                    }
+                }
+            }
+
+            Canvas(modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(vertical = 20.dp)) {
+
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+
+                drawLine(
+                    start = Offset(x = 60f, y = 0f),
+                    end = Offset(x = canvasWidth - 60, y = 0f),
+                    color = backgroundColor,
+                    strokeWidth = 4F
                 )
             }
-        }
-        Row(
-            modifier = modifier
-                .fillMaxWidth(1f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            IconButton(onClick = {
-                scope.launch {
-                    if (filmIsWatched == null || !filmIsWatched) {
-                        updateFilm(true)
-                    } else {
-                        updateFilm(false)
-                    }
-                }
-                Toast.makeText(
-                    context,
-                    if (filmIsWatched == null || !filmIsWatched) {
-                        "Фильм просмотрен!"
-                    } else {
-                        "Надо посмотреть!"
-                    },
-                    Toast.LENGTH_SHORT
-                ).show()
-            }) {
-                if (filmIsWatched == true){
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Icon check",
-                        tint = Color.Green
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = "Icon check",
-                        tint = Color.Red
-                    )
-                }
-            }
-            Row(modifier = Modifier
-                .height(24.dp)
-                .padding(0.dp), horizontalArrangement = Arrangement.Start) {
-                filmRating?.let {
-                    Text(
-                        modifier =modifier.fillMaxHeight(1f),
-//                        textAlign = TextAlign.Justify,
-                        fontWeight = FontWeight.ExtraBold,
-                        text = "$filmRating",
-                        fontSize = 20.sp,
-                        color = when(filmRating){
-                            in 1..4 -> Color(0xFFE91E63)
-                            in 6..7 -> Color(0xFFFF9800)
-                            else -> Color(0xFF37993B)
-                        }
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            if (!sheetState.isVisible) {
-                                sheetState.show()
-                            } else {
-                                sheetState.hide()
-                            }
-                        }
-                    },
-                    modifier = modifier,
-                    )
-                {
-                    Icon(
-                        modifier = modifier,
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Star Icon",
-                        tint = if (filmRating != null) {
-                            when(filmRating) {
-                                in 1..4 -> Color(0xFFE91E63)
-                                in 5..6 -> Color(0xFFFF9800)
-                                else -> Color(0xFF37993B)
-                            }
-                        } else {
-                            Color.Gray
-                        }
-                    )
-                }
-            }
-            TextButton(
-                onClick = { if (emojiRowState.value == WidgetState.CLOSED) {
-                    emojiRowState.value = WidgetState.OPENED
-                } else {
-                    emojiRowState.value = WidgetState.CLOSED
-                }
-                    }
-            ) {
-                Text(text = filmEmoji ?: "\uD83D\uDE34", fontSize = 20.sp, modifier = modifier)
-            }
-            IconButton(onClick = {
-                isEdited.value = !isEdited.value
-            }) {
-                Icon(imageVector = if (isEdited.value) Icons.Default.CheckCircle else Icons.Default.Edit, contentDescription = "oh yees")
-            }
-        }
 
-        if (emojiRowState.value == WidgetState.OPENED) {
-            LazyRow() {
-                items(emojiList) {emoji ->
-                    TextButton(
-                        onClick = {
-                            emojiRowState.value = WidgetState.CLOSED
-                            updateEmoji(emoji)
-                                  },
-                        modifier = modifier.padding(5.dp)
-                    ) {
-                        Text(text = emoji, fontSize = 24.sp)
-                    }
-                }
+            filmDescription?.let {
+                Text(
+                    modifier = modifier
+                        .padding(start = 16.dp, bottom = 8.dp)
+                        .fillMaxHeight(1f),
+                    text = filmDescription,
+                    color = textColor,
+                )
             }
-        }
-
-        Canvas(modifier = Modifier
-            .fillMaxWidth(1f)
-            .padding(vertical = 20.dp)) {
-
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-
-            drawLine(
-                start = Offset(x = 60f, y = 0f),
-                end = Offset(x = canvasWidth - 60, y = 0f),
-                color = backgroundColor,
-                strokeWidth = 4F
-            )
-        }
-
-        filmDescription?.let {
-            Text(
-                modifier = modifier
-                    .padding(start = 16.dp, bottom = 8.dp)
-                    .fillMaxHeight(1f),
-                text = filmDescription,
-                color = textColor,
-            )
         }
     }
 }
