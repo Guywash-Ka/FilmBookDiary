@@ -74,7 +74,7 @@ fun FilmCard(
             GlideImage(
                 imageModel = { filmImageUri },
                 modifier = modifier
-                    .height(120.dp)
+                    .height(220.dp)
                     .fillMaxWidth(1f)
                     .padding(all = 10.dp)
                     .graphicsLayer {
