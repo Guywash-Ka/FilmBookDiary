@@ -29,4 +29,9 @@ interface FilmDao {
     @Query("SELECT * FROM films WHERE name LIKE '%' || :filmName || '%'")
     fun searchFilmsByName(filmName: String): Flow<List<Film>>
 
+    @Query("SELECT COUNT(id) FROM films WHERE isWatched = 1")
+    fun getNumberOfWatchedFilms(): Flow<Int>
+
+    @Query("SELECT COUNT(id) FROM films WHERE isWatched = 0")
+    fun getNumberOfNotWatchedFilms(): Flow<Int>
 }

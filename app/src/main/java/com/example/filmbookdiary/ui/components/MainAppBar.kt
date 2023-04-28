@@ -87,35 +87,38 @@ fun DefaultAppBar(
             backgroundColor = colors.background,
             contentColor = colors.background,
             actions = {
-                IconButton(
-                    onClick = { onSearchClicked() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon",
-                        tint = secondaryTextColor
-                    )
-                }
-                when (filterWidgetState) {
-                    WidgetState.CLOSED -> {
-                        IconButton(onClick = { onFilterClicked() }) {
-                            Icon(
-                                painter = painterResource(R.drawable.outline_filter_alt_24),
-                                contentDescription = "Filter Icon",
-                                tint = secondaryTextColor
-                            )
+                if (title != "Profile") {
+                    IconButton(
+                        onClick = { onSearchClicked() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search Icon",
+                            tint = secondaryTextColor
+                        )
+                    }
+                    when (filterWidgetState) {
+                        WidgetState.CLOSED -> {
+                            IconButton(onClick = { onFilterClicked() }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.outline_filter_alt_24),
+                                    contentDescription = "Filter Icon",
+                                    tint = secondaryTextColor
+                                )
+                            }
+                        }
+                        WidgetState.OPENED -> {
+                            IconButton(onClick = { onCloseClicked() }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.outline_filter_alt_off_24),
+                                    contentDescription = "Close Icon",
+                                    tint = secondaryTextColor
+                                )
+                            }
                         }
                     }
-                    WidgetState.OPENED -> {
-                        IconButton(onClick = { onCloseClicked() }) {
-                            Icon(
-                                painter = painterResource(R.drawable.outline_filter_alt_off_24),
-                                contentDescription = "Close Icon",
-                                tint = secondaryTextColor
-                            )
-                        }
-                    }
                 }
+
 
             }
         )

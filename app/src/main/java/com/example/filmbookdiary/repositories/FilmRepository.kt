@@ -40,6 +40,9 @@ class FilmRepository private constructor(
 
     suspend fun removeAllFilms() = database.filmDao().removeAllFilms()
 
+    fun getNumberOfWatchedFilms() = database.filmDao().getNumberOfWatchedFilms()
+    fun getNumberOfNotWatchedFilms() = database.filmDao().getNumberOfNotWatchedFilms()
+
     fun updateFilm(film: Film) {
         coroutineScope.launch {
             database.filmDao().updateFilm(film)

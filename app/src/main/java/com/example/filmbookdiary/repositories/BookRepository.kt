@@ -48,6 +48,9 @@ class BookRepository private constructor(
 
     fun searchBooksByName(name: String): Flow<List<Book>> = database.bookDao().searchBooksByName(name)
 
+    fun getNumberOfReadBooks() = database.bookDao().getNumberOfReadBooks()
+    fun getNumberOfNotReadBooks() = database.bookDao().getNumberOfNotReadBooks()
+
     companion object {
         private var INSTANCE: BookRepository? = null
 

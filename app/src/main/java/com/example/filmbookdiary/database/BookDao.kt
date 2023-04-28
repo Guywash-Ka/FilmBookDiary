@@ -29,4 +29,10 @@ interface BookDao {
 
     @Query("SELECT * FROM books WHERE name LIKE '%' || :bookName || '%'")
     fun searchBooksByName(bookName: String): Flow<List<Book>>
+
+    @Query("SELECT COUNT(id) FROM books WHERE isRead = 1")
+    fun getNumberOfReadBooks(): Flow<Int>
+
+    @Query("SELECT COUNT(id) FROM books WHERE isRead = 0")
+    fun getNumberOfNotReadBooks(): Flow<Int>
 }
