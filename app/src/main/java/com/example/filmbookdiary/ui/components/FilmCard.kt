@@ -87,12 +87,13 @@ fun FilmCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Text(
+                    modifier = Modifier.weight(6f),
                     text = filmName,
                     fontWeight = FontWeight(600),
                     fontSize = 20.sp,
                     color = textColor
                 )
-                Text(text = filmEmoji, fontSize = 20.sp)
+                Text(text = filmEmoji, fontSize = 20.sp, modifier = Modifier.weight(1f))
             }
             Text(
                 text = filmDescription,
