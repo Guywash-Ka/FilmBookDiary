@@ -59,8 +59,7 @@ fun BooksScreen(
             modifier = modifier
                 .padding(4.dp)
                 .align(alignment = Alignment.BottomEnd),
-            elevation = FloatingActionButtonDefaults.elevation(4.dp),
-            backgroundColor = colors.primaryVariant
+            elevation = FloatingActionButtonDefaults.elevation(6.dp),
         ) {
             Icon(Icons.Filled.Add, "Add new element")
         }
