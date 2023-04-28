@@ -25,9 +25,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.filmbookdiary.nav.DiaryDestination
+import com.example.filmbookdiary.ui.theme.textColor
 import java.util.*
 
 @Composable
@@ -49,7 +51,7 @@ fun DiaryTabRow(
         ) {
             allScreens.forEach { screen ->
                 DiaryTab(
-                    text = screen.route,
+                    text = translateTitle(screen.route),
                     icon = screen.icon,
                     onSelected = { onTabSelected(screen) },
                     selected = currentScreen == screen
@@ -66,7 +68,7 @@ private fun DiaryTab(
     onSelected: () -> Unit,
     selected: Boolean
 ) {
-    val color = MaterialTheme.colors.onSurface
+    val color = textColor
     val durationMillis = if (selected) TabFadeInAnimationDuration else TabFadeOutAnimationDuration
     val animSpec = remember {
         tween<Color>(
@@ -89,18 +91,14 @@ private fun DiaryTab(
                 onClick = onSelected,
                 role = Role.Tab,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(
-                    bounded = false,
-                    radius = Dp.Unspecified,
-                    color = Color.Unspecified
-                )
+                indication = null
             )
             .clearAndSetSemantics { contentDescription = text }
     ) {
         Icon(painter = painterResource(icon), contentDescription = text, tint = tabTintColor)
         if (selected) {
             Spacer(Modifier.width(12.dp))
-            Text(text.uppercase(Locale.getDefault()), color = tabTintColor)
+            Text(text = text, fontWeight = FontWeight(600), color = tabTintColor)
         }
     }
 }

@@ -80,7 +80,7 @@ fun DefaultAppBar(
         TopAppBar(
             title = {
                 Text(
-                    text = title
+                    text = translateTitle(title)
                 )
             },
             elevation = 0.dp,
@@ -121,11 +121,11 @@ fun DefaultAppBar(
         )
         if (filterWidgetState == WidgetState.OPENED){
             Row(Modifier.fillMaxWidth().background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
-                TextButton(content = { Text("Name", color = textColor) }, onClick = { onFilterSelectClicked(
+                TextButton(content = { Text("по названию", color = textColor) }, onClick = { onFilterSelectClicked(
                     FilterState.NAME) })
-                TextButton(content = { Text("Date", color = textColor) }, onClick = { onFilterSelectClicked(
+                TextButton(content = { Text("по времени", color = textColor) }, onClick = { onFilterSelectClicked(
                     FilterState.DATE) })
-                TextButton(content = { Text("Rating", color = textColor) }, onClick = { onFilterSelectClicked(
+                TextButton(content = { Text("по рейтингу", color = textColor) }, onClick = { onFilterSelectClicked(
                     FilterState.RATING) })
             }
         }
@@ -171,7 +171,7 @@ fun SearchAppBar(
                 Text(
                     modifier = Modifier
                         .alpha(ContentAlpha.medium),
-                    text = "Search here...",
+                    text = "Название...",
                     color = textColor
                 )
             },
@@ -250,4 +250,13 @@ fun SearchAppBarPreview() {
         onCloseClicked = {},
         onSearchClicked = {}
     )
+}
+
+fun translateTitle(title: String): String {
+    return when (title.lowercase()) {
+        "films" -> "Фильмы"
+        "books" -> "Книги"
+        "profile" -> "Профиль"
+        else -> " "
+    }
 }
