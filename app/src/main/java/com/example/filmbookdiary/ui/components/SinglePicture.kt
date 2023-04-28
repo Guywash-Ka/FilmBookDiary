@@ -15,14 +15,14 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun SingleFilmPicture(
-    filmImageUri: Uri?,
+fun SinglePicture(
+    singleImageUri: Uri?,
     imageUri: Uri?,
     modifier: Modifier
 
     ) {
     GlideImage(
-        imageModel = { imageUri ?: filmImageUri },
+        imageModel = { imageUri ?: singleImageUri },
         modifier = modifier
             .height(370.dp)
             .fillMaxWidth(1f)
@@ -45,7 +45,7 @@ fun SingleFilmPicture(
         }
     }
     GlideImage(
-        imageModel = { imageUri ?: filmImageUri },
+        imageModel = { imageUri ?: singleImageUri },
         modifier = modifier
             .height(250.dp)
             .width(250.dp),

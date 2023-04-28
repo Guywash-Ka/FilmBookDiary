@@ -32,6 +32,10 @@ class SingleBookViewModel(bookId: UUID): ViewModel() {
         book.value?.let { bookRepository.updateBook(it) }
     }
 
+    suspend fun removeBook(book: Book) {
+        bookRepository.removeBook(book)
+    }
+
     override fun onCleared() {
         super.onCleared()
         book.value?.let { bookRepository.updateBook(it) }

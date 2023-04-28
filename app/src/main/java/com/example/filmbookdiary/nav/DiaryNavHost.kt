@@ -72,7 +72,12 @@ fun DiaryNavHost(
         ) { navBackStackEntry ->
             val bookID =
                 navBackStackEntry.arguments?.getString(SingleBook.bookIDArg)
-            SingleBookScreen(bookID = bookID)
+            SingleBookScreen(
+                bookID = bookID,
+                navigateBack = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }

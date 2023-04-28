@@ -41,79 +41,90 @@ fun BookPage(
     bookAuthor: String,
     bookDescription: String,
     bookRating: Int?,
+    bookEmoji: String,
     onBookClicked: (UUID) -> Unit,
     bookViewModel: BookViewModel
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    Card(
-        shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
-        elevation = 10.dp,
-        modifier = modifier.clickable { onBookClicked(bookID) }
-    ) {
-        Box() {
-            Row(modifier = modifier.background(color = colors.primary)) {
-                GlideImage(
-                    imageModel = { bookImageUri },
-                    modifier = modifier.height(240.dp).width(140.dp)
-                )
-                Row(
-                    modifier = modifier.fillMaxWidth(1f),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column() {
-                        Text(
-                            modifier = modifier.padding(start = 8.dp, end = 30.dp),
-                            fontWeight = FontWeight.ExtraBold,
-                            text = bookName,
-                            style = typography.h5,
-                            color = colors.onPrimary,
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            modifier = modifier.padding(start = 8.dp),
-                            fontWeight = FontWeight.Bold,
-                            text = bookAuthor,
-                            style = typography.h6,
-                            color = colors.onPrimary,
-                            maxLines = 2,
-                            overflow = TextOverflow.Clip
-                        )
-                        Text(
-                            modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
-                            text = bookDescription,
-                            color = colors.onPrimary,
-                            maxLines = 20,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    if (bookRating != null) {
-                        Text(
-                            text = "$bookRating/$maxRating",
-                            fontWeight = FontWeight.ExtraBold,
-                            style = typography.h4,
-                            color = colors.onPrimary
-                        )
-                    }
-                }
-            }
-            IconButton(onClick = {
-                coroutineScope.launch {
-                    bookViewModel.removeBook(bookViewModel.getBook(bookID))
-                }
-            },
-                modifier = modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    Icons.Filled.Clear,
-                    contentDescription = "Remove element",
-                    tint = colors.onPrimary
-                )
-            }
-        }
-
-    }
+//    val coroutineScope = rememberCoroutineScope()
+//
+//    Card(
+//        shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
+//        elevation = 10.dp,
+//        modifier = modifier.clickable { onBookClicked(bookID) }
+//    ) {
+//        Box() {
+//            Row(modifier = modifier.background(color = colors.primary)) {
+//                GlideImage(
+//                    imageModel = { bookImageUri },
+//                    modifier = modifier.height(240.dp).width(140.dp)
+//                )
+//                Row(
+//                    modifier = modifier.fillMaxWidth(1f),
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    Column() {
+//                        Text(
+//                            modifier = modifier.padding(start = 8.dp, end = 30.dp),
+//                            fontWeight = FontWeight.ExtraBold,
+//                            text = bookName,
+//                            style = typography.h5,
+//                            color = colors.onPrimary,
+//                            maxLines = 3,
+//                            overflow = TextOverflow.Ellipsis
+//                        )
+//                        Text(
+//                            modifier = modifier.padding(start = 8.dp),
+//                            fontWeight = FontWeight.Bold,
+//                            text = bookAuthor,
+//                            style = typography.h6,
+//                            color = colors.onPrimary,
+//                            maxLines = 2,
+//                            overflow = TextOverflow.Clip
+//                        )
+//                        Text(
+//                            modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
+//                            text = bookDescription,
+//                            color = colors.onPrimary,
+//                            maxLines = 20,
+//                            overflow = TextOverflow.Ellipsis
+//                        )
+//                    }
+//                    if (bookRating != null) {
+//                        Text(
+//                            text = "$bookRating/$maxRating",
+//                            fontWeight = FontWeight.ExtraBold,
+//                            style = typography.h4,
+//                            color = colors.onPrimary
+//                        )
+//                    }
+//                }
+//            }
+//            IconButton(onClick = {
+//                coroutineScope.launch {
+//                    bookViewModel.removeBook(bookViewModel.getBook(bookID))
+//                }
+//            },
+//                modifier = modifier.align(Alignment.TopEnd)
+//            ) {
+//                Icon(
+//                    Icons.Filled.Clear,
+//                    contentDescription = "Remove element",
+//                    tint = colors.onPrimary
+//                )
+//            }
+//        }
+//
+//    }
+    BookCard(
+        bookID = bookID,
+        bookImageUri = bookImageUri,
+        bookName = bookName,
+        bookDescription = bookDescription,
+        bookRating = bookRating,
+        bookAuthor = bookAuthor,
+        bookEmoji = bookEmoji,
+        onBookClicked = onBookClicked
+    )
 }
 
 @Composable
@@ -135,6 +146,7 @@ fun BookList(
                     bookAuthor = it.author,
                     bookDescription = it.description,
                     bookRating = it.rating,
+                    bookEmoji = it.emoji,
                     onBookClicked = onBookClicked,
                     bookViewModel = bookViewModel
                 )

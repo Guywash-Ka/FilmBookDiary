@@ -36,7 +36,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
-import com.example.filmbookdiary.ui.components.SingleFilmPicture
+import com.example.filmbookdiary.ui.components.SinglePicture
 import com.example.filmbookdiary.ui.theme.*
 import com.example.filmbookdiary.viewmodel.SingFilmViewModelFactory
 import com.example.filmbookdiary.viewmodel.SingleFilmViewModel
@@ -130,8 +130,8 @@ fun SingleFilmScreen(
             .background(color = Color.White)
             .fillMaxHeight(1f)) {
             Box(contentAlignment = Alignment.Center) {
-                SingleFilmPicture(
-                    filmImageUri = filmImageUri,
+                SinglePicture(
+                    singleImageUri = filmImageUri,
                     imageUri = imageUri,
                     modifier = modifier
                 )
