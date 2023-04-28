@@ -1,9 +1,8 @@
 package com.example.filmbookdiary.ui.screens.splash
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -33,58 +32,21 @@ fun SplashScreen(navigateToMainScreen: () -> Unit) {
             Box(
                 modifier = Modifier
                     .background(
-                        colors.primary
+                        Color.White
                     )
                     .fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 AnimatedVisibility(
                     visible = visible,
-                    enter = slideInVertically(
-                        initialOffsetY = {
-                            // Slide in from top
-                            -it
-                        },
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearEasing
-                        )
-                    ),
+                    enter = fadeIn() + expandHorizontally(),
+                    exit = fadeOut()
                 ) {
-                    Column(
-                        verticalArrangement =
-                        Arrangement.Center,
-                        horizontalAlignment =
-                        Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .padding(it)
-                            .background(
-                                colors.primary
-                            )
-                            .fillMaxSize()
-                    ) {
-                        Text(
-                            "FBDiary",
-                            fontSize = 36.sp,
-                            modifier = Modifier.padding(
-                                bottom =
-                                100.dp
-                            ),
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Box(
-                            modifier = Modifier
-                                .height(150.dp)
-                                .width(150.dp)
-                                .clip(
-                                    RoundedCornerShape(
-                                        8.dp
-                                    )
-                                )
-                        ) {
-                            Image(painter = painterResource(id = R.drawable.start_photo2), contentDescription = "start photo")
-                        }
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.splash_image),
+                        contentDescription = "$it",
+                        alignment = Alignment.Center,
+                    )
                 }
             }
             LaunchedEffect(true) {
