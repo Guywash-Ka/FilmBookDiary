@@ -60,30 +60,30 @@ fun BookCard(
         shape = RoundedCornerShape(10.dp),
     ) {
         Row() {
-            Image(
-                painter = painterResource(id = R.drawable.drive_photo),
-                contentDescription = "Book Photo",
-                contentScale = ContentScale.Crop,
-                modifier = modifier
-                    .height(240.dp)
-                    .width(160.dp)
-                    .padding(10.dp)
-                    .graphicsLayer {
-                        clip = true
-                        shape = RoundedCornerShape(10.dp)
-                    }
-            )
-//            GlideImage(
-//                imageModel = { bookImageUri },
+//            Image(
+//                painter = painterResource(id = R.drawable.drive_photo),
+//                contentDescription = "Book Photo",
+//                contentScale = ContentScale.Crop,
 //                modifier = modifier
 //                    .height(240.dp)
 //                    .width(160.dp)
-//                    .padding(all = 10.dp)
+//                    .padding(10.dp)
 //                    .graphicsLayer {
 //                        clip = true
 //                        shape = RoundedCornerShape(10.dp)
 //                    }
 //            )
+            GlideImage(
+                imageModel = { bookImageUri },
+                modifier = modifier
+                    .height(240.dp)
+                    .width(160.dp)
+                    .padding(all = 10.dp)
+                    .graphicsLayer {
+                        clip = true
+                        shape = RoundedCornerShape(10.dp)
+                    }
+            )
             Column(modifier = modifier.height(240.dp), verticalArrangement = Arrangement.SpaceEvenly) {
 
 
