@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -41,7 +42,9 @@ fun DiaryTabRow(
             .fillMaxWidth(),
     ) {
         Row(
-            Modifier.selectableGroup().fillMaxWidth(),
+            Modifier
+                .selectableGroup()
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             allScreens.forEach { screen ->
@@ -59,7 +62,7 @@ fun DiaryTabRow(
 @Composable
 private fun DiaryTab(
     text: String,
-    icon: ImageVector,
+    icon: Int,
     onSelected: () -> Unit,
     selected: Boolean
 ) {
@@ -94,7 +97,7 @@ private fun DiaryTab(
             )
             .clearAndSetSemantics { contentDescription = text }
     ) {
-        Icon(imageVector = icon, contentDescription = text, tint = tabTintColor)
+        Icon(painter = painterResource(icon), contentDescription = text, tint = tabTintColor)
         if (selected) {
             Spacer(Modifier.width(12.dp))
             Text(text.uppercase(Locale.getDefault()), color = tabTintColor)

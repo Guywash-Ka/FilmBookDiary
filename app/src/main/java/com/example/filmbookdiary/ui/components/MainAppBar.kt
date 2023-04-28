@@ -18,10 +18,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.data.FilterState
 import com.example.filmbookdiary.ui.theme.secondaryTextColor
@@ -98,7 +100,7 @@ fun DefaultAppBar(
                     WidgetState.CLOSED -> {
                         IconButton(onClick = { onFilterClicked() }) {
                             Icon(
-                                imageVector = Icons.Filled.List,
+                                painter = painterResource(R.drawable.outline_filter_alt_24),
                                 contentDescription = "Filter Icon",
                                 tint = secondaryTextColor
                             )
@@ -107,7 +109,7 @@ fun DefaultAppBar(
                     WidgetState.OPENED -> {
                         IconButton(onClick = { onCloseClicked() }) {
                             Icon(
-                                imageVector = Icons.Filled.Clear,
+                                painter = painterResource(R.drawable.outline_filter_alt_off_24),
                                 contentDescription = "Close Icon",
                                 tint = secondaryTextColor
                             )
@@ -117,14 +119,15 @@ fun DefaultAppBar(
 
             }
         )
-        if (filterWidgetState == WidgetState.OPENED)
-        Row(Modifier.fillMaxWidth().background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
-            TextButton(content = { Text("Name", color = textColor) }, onClick = { onFilterSelectClicked(
-                FilterState.NAME) })
-            TextButton(content = { Text("Date", color = textColor) }, onClick = { onFilterSelectClicked(
-                FilterState.DATE) })
-            TextButton(content = { Text("Rating", color = textColor) }, onClick = { onFilterSelectClicked(
-                FilterState.RATING) })
+        if (filterWidgetState == WidgetState.OPENED){
+            Row(Modifier.fillMaxWidth().background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
+                TextButton(content = { Text("Name", color = textColor) }, onClick = { onFilterSelectClicked(
+                    FilterState.NAME) })
+                TextButton(content = { Text("Date", color = textColor) }, onClick = { onFilterSelectClicked(
+                    FilterState.DATE) })
+                TextButton(content = { Text("Rating", color = textColor) }, onClick = { onFilterSelectClicked(
+                    FilterState.RATING) })
+            }
         }
         Canvas(modifier = Modifier.fillMaxWidth(1f)) {
 
