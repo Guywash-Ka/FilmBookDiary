@@ -100,7 +100,7 @@ fun BookCard(
                         fontSize = 20.sp,
                         color = textColor,
                     )
-                    Text(text = "\uD83D\uDE00", fontSize = 20.sp, modifier = Modifier.weight(1f),)
+                    Text(text = bookEmoji, fontSize = 20.sp, modifier = Modifier.weight(1f),)
                 }
                 Text(
                     text = bookDescription,
