@@ -31,7 +31,7 @@ fun BooksScreen(
     } else {
         bookViewModel.searchBooksByName(searchTextState).collectAsState(emptyList()).value.reversed()
     }
-    val booksList = when (filterSelectState) { // TODO СДЕЛАТЬ ЧЕРЕЗ БД
+    val booksList = when (filterSelectState) {
         FilterState.DATE -> preBooksList
         FilterState.NAME -> preBooksList.sortedBy { it.name }
         FilterState.RATING -> preBooksList.sortedBy { it.rating }.reversed()

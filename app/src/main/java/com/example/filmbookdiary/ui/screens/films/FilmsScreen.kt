@@ -31,7 +31,7 @@ fun FilmsScreen(
     } else {
         filmViewModel.searchFilmsByName(searchTextState).collectAsState(emptyList()).value.reversed()
     }
-    val filmsList = when (filterSelectState) { // TODO СДЕЛАТЬ ЧЕРЕЗ БД
+    val filmsList = when (filterSelectState) {
         FilterState.DATE -> preFilmsList
         FilterState.NAME -> preFilmsList.sortedBy { it.name }
         FilterState.RATING -> preFilmsList.sortedBy { it.rating }.reversed()
