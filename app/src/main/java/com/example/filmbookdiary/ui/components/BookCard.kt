@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,6 +72,8 @@ fun BookCard(
                         text = bookName,
                         fontWeight = FontWeight(600),
                         fontSize = 20.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                         color = textColor,
                     )
                     Text(text = bookEmoji, fontSize = 20.sp, modifier = Modifier.weight(1f))
@@ -80,6 +83,7 @@ fun BookCard(
                     fontWeight = FontWeight(400),
                     fontSize = 14.sp,
                     maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     color = textColor,
                     modifier = modifier.padding(start = 10.dp, end = 80.dp, bottom = 10.dp)
                 )
@@ -100,6 +104,8 @@ fun BookCard(
                             text = bookAuthor,
                             fontWeight = FontWeight(600),
                             fontSize = 16.sp,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
                             color = secondaryTextColor
                         )
                     }

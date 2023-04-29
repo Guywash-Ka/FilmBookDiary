@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,6 +64,8 @@ fun FilmCard(
                 Text(
                     modifier = Modifier.weight(6f),
                     text = filmName,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight(600),
                     fontSize = 20.sp,
                     color = textColor
@@ -74,6 +77,7 @@ fun FilmCard(
                 fontWeight = FontWeight(400),
                 fontSize = 14.sp,
                 maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
                 color = textColor,
                 modifier = modifier.padding(start = 10.dp, end = 80.dp, bottom = 10.dp)
             )
@@ -92,6 +96,8 @@ fun FilmCard(
 
                     Text(
                         text = filmAuthor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight(600),
                         fontSize = 16.sp,
                         color = secondaryTextColor
