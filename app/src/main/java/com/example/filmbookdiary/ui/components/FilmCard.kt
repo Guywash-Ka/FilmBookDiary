@@ -1,36 +1,26 @@
 package com.example.filmbookdiary.ui.components
 
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import com.example.filmbookdiary.FilmBookDiaryApplication.Companion.maxRating
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.ui.theme.secondaryTextColor
@@ -49,28 +39,12 @@ fun FilmCard(
     filmAuthor: String?,
     filmEmoji: String,
     onFilmClicked: (UUID) -> Unit,
-//    filmViewModel: FilmViewModel
 ) {
     Card(
         modifier = modifier
-//            .shadow(elevation = 8.dp, ambientColor = Color.Blue, spotColor = Color.Blue)
             .fillMaxWidth(1f).padding(horizontal = 12.dp, vertical = 5.dp).clickable { onFilmClicked(filmID) }, shape = RoundedCornerShape(10.dp),
     ) {
         Column() {
-//            Image(
-//                painter = painterResource(id = R.drawable.drive_photo),
-//                contentDescription = "Film Photo",
-//                contentScale = ContentScale.Crop,
-//                modifier = modifier
-//                    .height(120.dp)
-//                    .fillMaxWidth(1f)
-//                    .padding(10.dp)
-//                    .graphicsLayer {
-//                        clip = true
-//                        shape = RoundedCornerShape(10.dp)
-//
-//                    }
-//            )
             GlideImage(
                 imageModel = { filmImageUri },
                 modifier = modifier
@@ -124,12 +98,6 @@ fun FilmCard(
                     )
                 }
             }
-//            LinearProgressIndicator(
-//                progress = 75f,
-//                color = Color(0xFFD32F2F),
-//                backgroundColor = Color(0xFFEF9A9A),
-//                modifier = modifier
-//            )
             Box(
                 modifier = modifier.fillMaxWidth(1f).padding(10.dp)
             )
@@ -154,7 +122,7 @@ fun FilmCardPreview() {
     FilmCard(
         modifier = Modifier,
         filmID = UUID.randomUUID(),
-        filmImageUri = Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.drive_photo),
+        filmImageUri = Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo),
         filmName = "Drive",
         filmDescription = "Some film description that will be interesting to everyone",
         filmRating = 7,

@@ -14,7 +14,6 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +27,6 @@ import com.example.filmbookdiary.FilmBookDiaryApplication.Companion.maxRating
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.viewmodel.BookViewModel
-import com.skydoves.landscapist.glide.GlideImage
-import kotlinx.coroutines.launch
 import java.util.UUID
 
 @Composable
@@ -43,78 +40,7 @@ fun BookPage(
     bookRating: Int?,
     bookEmoji: String,
     onBookClicked: (UUID) -> Unit,
-    bookViewModel: BookViewModel
 ) {
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    Card(
-//        shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
-//        elevation = 10.dp,
-//        modifier = modifier.clickable { onBookClicked(bookID) }
-//    ) {
-//        Box() {
-//            Row(modifier = modifier.background(color = colors.primary)) {
-//                GlideImage(
-//                    imageModel = { bookImageUri },
-//                    modifier = modifier.height(240.dp).width(140.dp)
-//                )
-//                Row(
-//                    modifier = modifier.fillMaxWidth(1f),
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    Column() {
-//                        Text(
-//                            modifier = modifier.padding(start = 8.dp, end = 30.dp),
-//                            fontWeight = FontWeight.ExtraBold,
-//                            text = bookName,
-//                            style = typography.h5,
-//                            color = colors.onPrimary,
-//                            maxLines = 3,
-//                            overflow = TextOverflow.Ellipsis
-//                        )
-//                        Text(
-//                            modifier = modifier.padding(start = 8.dp),
-//                            fontWeight = FontWeight.Bold,
-//                            text = bookAuthor,
-//                            style = typography.h6,
-//                            color = colors.onPrimary,
-//                            maxLines = 2,
-//                            overflow = TextOverflow.Clip
-//                        )
-//                        Text(
-//                            modifier = modifier.padding(start = 16.dp, bottom = 8.dp),
-//                            text = bookDescription,
-//                            color = colors.onPrimary,
-//                            maxLines = 20,
-//                            overflow = TextOverflow.Ellipsis
-//                        )
-//                    }
-//                    if (bookRating != null) {
-//                        Text(
-//                            text = "$bookRating/$maxRating",
-//                            fontWeight = FontWeight.ExtraBold,
-//                            style = typography.h4,
-//                            color = colors.onPrimary
-//                        )
-//                    }
-//                }
-//            }
-//            IconButton(onClick = {
-//                coroutineScope.launch {
-//                    bookViewModel.removeBook(bookViewModel.getBook(bookID))
-//                }
-//            },
-//                modifier = modifier.align(Alignment.TopEnd)
-//            ) {
-//                Icon(
-//                    Icons.Filled.Clear,
-//                    contentDescription = "Remove element",
-//                    tint = colors.onPrimary
-//                )
-//            }
-//        }
-//
-//    }
     BookCard(
         bookID = bookID,
         bookImageUri = bookImageUri,
@@ -131,8 +57,7 @@ fun BookPage(
 fun BookList(
     modifier: Modifier,
     books: List<Book>,
-    onBookClicked: (UUID) -> Unit,
-    bookViewModel: BookViewModel
+    onBookClicked: (UUID) -> Unit
 ) {
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(all = 8.dp)) {
@@ -147,8 +72,7 @@ fun BookList(
                     bookDescription = it.description,
                     bookRating = it.rating,
                     bookEmoji = it.emoji,
-                    onBookClicked = onBookClicked,
-                    bookViewModel = bookViewModel
+                    onBookClicked = onBookClicked
                 )
             },
         )
@@ -176,7 +100,7 @@ fun BookPagePreview(
 
             Row(modifier = modifier.background(color = colors.primary)) {
                 Image(
-                    painter = painterResource(R.drawable.niceguys_photo),
+                    painter = painterResource(R.drawable.empty_photo),
                     contentDescription = "Book image",
                     contentScale = ContentScale.FillHeight,
                     modifier = modifier

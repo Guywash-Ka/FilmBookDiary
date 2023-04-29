@@ -9,7 +9,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,7 +35,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
 import com.example.filmbookdiary.ui.components.SinglePicture
-import com.example.filmbookdiary.ui.screens.films.ShowFilmScreen
 import com.example.filmbookdiary.ui.theme.backgroundColor
 import com.example.filmbookdiary.ui.theme.secondaryTextColor
 import com.example.filmbookdiary.ui.theme.textColor
@@ -132,7 +130,6 @@ fun SingleBookScreen(
     ) {
         Column(modifier = modifier
             .verticalScroll(enabled = true, state = ScrollState(0))
-//            .background(color = Color.White)
             .fillMaxHeight(1f)) {
             Box(contentAlignment = Alignment.Center) {
                 SinglePicture(
@@ -374,7 +371,6 @@ fun ShowBookScreen(
                         bookRating?.let {
                             Text(
                                 modifier = modifier.fillMaxHeight(1f),
-//                        textAlign = TextAlign.Justify,
                                 fontWeight = FontWeight.ExtraBold,
                                 text = "$bookRating",
                                 fontSize = 20.sp,

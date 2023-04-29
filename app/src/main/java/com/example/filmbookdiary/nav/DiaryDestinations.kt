@@ -1,15 +1,5 @@
 package com.example.filmbookdiary.nav
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.filmbookdiary.R
@@ -20,9 +10,7 @@ interface DiaryDestination {
 }
 
 object Splash: DiaryDestination {
-    override val icon: Int
-        get() = TODO("Not yet implemented")
-
+    override val icon = R.drawable.round_person_24
     override val route = "splash"
 }
 
@@ -42,8 +30,7 @@ object Profile : DiaryDestination {
 }
 
 object SingleFilm: DiaryDestination {
-    override val icon: Int
-        get() = TODO("Not yet implemented")
+    override val icon = R.drawable.outline_ondemand_video_24
     override val route = "singleFilm"
     const val filmIDArg = "film_id"
     val routeWithArgs = "${route}/{${filmIDArg}}"
@@ -53,8 +40,7 @@ object SingleFilm: DiaryDestination {
 }
 
 object SingleBook: DiaryDestination {
-    override val icon: Int
-        get() = TODO("Not yet implemented")
+    override val icon = R.drawable.round_menu_book_24
     override val route = "singleBook"
     const val bookIDArg = "book_id"
     val routeWithArgs = "${route}/{${bookIDArg}}"

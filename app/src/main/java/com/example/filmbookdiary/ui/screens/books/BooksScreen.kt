@@ -3,7 +3,6 @@ package com.example.filmbookdiary.ui.screens.books
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
@@ -27,7 +26,6 @@ fun BooksScreen(
     searchTextState: String,
     filterSelectState: FilterState
 ) {
-//    val booksList = bookViewModel.books.collectAsState(emptyList()).value
     val preBooksList = if (searchTextState == "") {
         bookViewModel.books.collectAsState(emptyList()).value.reversed()
     } else {
@@ -45,7 +43,6 @@ fun BooksScreen(
             modifier = modifier,
             books = booksList,
             onBookClicked = navigateToSingleElement,
-            bookViewModel = bookViewModel
         )
         FloatingActionButton(
             onClick = {
@@ -63,19 +60,5 @@ fun BooksScreen(
         ) {
             Icon(Icons.Filled.Add, "Add new element")
         }
-
-//        FloatingActionButton(
-//            onClick = { coroutineScope.launch {
-//                bookViewModel.removeAllBooks()
-//            }
-//            },
-//            modifier = modifier
-//                .padding(4.dp)
-//                .align(alignment = Alignment.BottomStart),
-//            elevation = FloatingActionButtonDefaults.elevation(4.dp),
-//            backgroundColor = colors.primaryVariant
-//        ) {
-//            Icon(Icons.Filled.Clear, "Remove all elements")
-//        }
     }
 }

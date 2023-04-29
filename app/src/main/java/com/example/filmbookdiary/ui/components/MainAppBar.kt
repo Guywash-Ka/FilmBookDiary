@@ -8,16 +8,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.TextStyle
@@ -133,13 +130,7 @@ fun DefaultAppBar(
             }
         }
         Canvas(modifier = Modifier.fillMaxWidth(1f)) {
-
-            // Fetching width and height for
-            // setting start x and end y
             val canvasWidth = size.width
-            val canvasHeight = size.height
-
-            // drawing a line between start(x,y) and end(x,y)
             drawLine(
                 start = Offset(x = 60f, y = 0f),
                 end = Offset(x = canvasWidth - 60, y = 0f),
@@ -223,7 +214,8 @@ fun SearchAppBar(
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
                 cursorColor = textColor.copy(alpha = ContentAlpha.medium)
-            ))
+            )
+        )
     }
 }
 

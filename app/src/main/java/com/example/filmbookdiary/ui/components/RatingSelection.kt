@@ -41,13 +41,6 @@ fun RatingSelectionRow(sheetState: ModalBottomSheetState, singleFilmViewModel: K
     }
 }
 
-//@OptIn(ExperimentalMaterialApi::class)
-//@Preview(showBackground = true)
-//@Composable
-//fun RatingSelectionRowPreview() {
-//    RatingSelectionRow(ModalBottomSheetState)
-//}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun TextButtonElement(listState: LazyListState, item: Int, sheetState: ModalBottomSheetState, singleFilmViewModel: KFunction1<Int, Unit>) {
@@ -85,59 +78,3 @@ fun LazyListLayoutInfo.normalizedItemPosition(key: Any) : Float =
             (it.offset.toFloat() - center) / center
         }
         ?: 0F
-
-// TODO Внизу либо удалить, либо использовать для остановки на нужном элементе
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun SnappyLazyRow(sheetState: ModalBottomSheetState) {
-
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    val list = List(50) { it + 1 }
-
-    LazyRow(
-        state = listState,
-        modifier = Modifier.fillMaxSize(),
-        content = {
-            items(list) { index ->
-//                TextButtonElement(
-//                    listState = listState, item = index, sheetState = sheetState, singleFilmViewModel = SingleFilmViewModel(UUID.randomUUID())
-//                )
-
-                if(!listState.isScrollInProgress){
-                    if(listState.isHalfPastItemLeft())
-                        coroutineScope.scrollBasic(listState, left = true)
-                    else
-                        coroutineScope.scrollBasic(listState)
-
-                    if(listState.isHalfPastItemRight())
-                        coroutineScope.scrollBasic(listState)
-                    else
-                        coroutineScope.scrollBasic(listState, left = true)
-                }
-            }
-        })
-}
-
-private fun CoroutineScope.scrollBasic(listState: LazyListState, left: Boolean = false){
-    launch {
-        val pos = if(left) listState.firstVisibleItemIndex else listState.firstVisibleItemIndex+1
-        listState.animateScrollToItem(pos)
-    }
-}
-
-@Composable
-private fun LazyListState.isHalfPastItemRight(): Boolean {
-    return firstVisibleItemScrollOffset > 500
-}
-
-@Composable
-private fun LazyListState.isHalfPastItemLeft(): Boolean {
-    return firstVisibleItemScrollOffset <= 500
-}
-
-//@Preview
-//@Composable
-//fun SnappyLazyRowPreview() {
-//    SnappyLazyRow()
-//}

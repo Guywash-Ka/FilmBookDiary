@@ -94,12 +94,17 @@ fun AnimatedCircle(
 @Preview
 @Composable
 fun AnimatedCirclePreview() {
-    AnimatedCircle(modifier = Modifier.fillMaxWidth(1f).fillMaxHeight(1f), proportions = listOf(20f, 50f, 30f), colors = listOf(Color.Red, Color.Blue, Color.Green))
+    AnimatedCircle(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .fillMaxHeight(1f),
+        proportions = listOf(20f, 50f, 30f),
+        colors = listOf(
+            Color.Red,
+            Color.Blue,
+            Color.Green
+        )
+    )
 }
 
 private enum class AnimatedCircleProgress { START, END }
-
-fun <E> List<E>.extractProportions(selector: (E) -> Float): List<Float> {
-    val total = this.sumOf { selector(it).toDouble() }
-    return this.map { (selector(it) / total).toFloat() }
-}

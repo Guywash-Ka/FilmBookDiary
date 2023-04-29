@@ -3,7 +3,6 @@ package com.example.filmbookdiary.ui.screens.films
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
@@ -27,9 +26,6 @@ fun FilmsScreen(
     searchTextState: String,
     filterSelectState: FilterState
 ) {
-
-
-//    val filmsList = filmViewModel.films.collectAsState(emptyList()).value
     val preFilmsList = if (searchTextState == "") {
         filmViewModel.films.collectAsState(emptyList()).value.reversed()
     } else {
@@ -46,7 +42,6 @@ fun FilmsScreen(
             modifier = modifier,
             films = filmsList,
             onFilmClicked = navigateToSingleFilm,
-//            filmViewModel = filmViewModel
         )
         FloatingActionButton(
             onClick = {

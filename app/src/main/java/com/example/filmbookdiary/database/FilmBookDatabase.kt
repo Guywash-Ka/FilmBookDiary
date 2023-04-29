@@ -42,7 +42,7 @@ val migration_4_5 = object : Migration(4, 5) {
 
 val migration_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE films ADD COLUMN emoji TEXT NOT NULL DEFAULT '\uD83D\uDE0E'")
+        database.execSQL("ALTER TABLE films ADD COLUMN emoji TEXT NOT NULL DEFAULT '\uD83C\uDF9E'")
     }
 }
 

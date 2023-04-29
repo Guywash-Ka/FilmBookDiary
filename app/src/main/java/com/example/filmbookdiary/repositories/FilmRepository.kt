@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.database.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -12,7 +13,8 @@ import java.util.UUID
 
 private const val DATABASE_NAME = "FBDiary_db"
 
-class FilmRepository private constructor(
+class FilmRepository @OptIn(DelicateCoroutinesApi::class)
+private constructor(
     context: Context,
     private val coroutineScope: CoroutineScope = GlobalScope
 ){

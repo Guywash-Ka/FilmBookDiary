@@ -19,7 +19,6 @@ fun DiaryNavHost(
     modifier: Modifier = Modifier,
     searchTextState: String,
     filterSelectState: FilterState
-
 ) {
     NavHost(
         navController = navController,
@@ -31,7 +30,6 @@ fun DiaryNavHost(
                 navController.navigatePopUpTo(Films.route)
             }
         }
-
         composable(route = Films.route) {
             FilmsScreen(
                 navigateToSingleFilm = { filmID ->

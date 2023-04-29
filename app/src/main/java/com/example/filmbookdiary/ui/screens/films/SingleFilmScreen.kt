@@ -361,7 +361,6 @@ fun ShowFilmScreen(
                         filmRating?.let {
                             Text(
                                 modifier = modifier.fillMaxHeight(1f),
-//                        textAlign = TextAlign.Justify,
                                 fontWeight = FontWeight.ExtraBold,
                                 text = "$filmRating",
                                 fontSize = 20.sp,
