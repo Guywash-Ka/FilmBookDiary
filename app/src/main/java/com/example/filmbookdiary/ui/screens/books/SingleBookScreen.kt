@@ -222,6 +222,9 @@ fun EditBookScreen(
         name?.let {
             TextField(
                 value = it,
+                placeholder = {
+                    Text(text = "Название книги..", color = Color.Gray)
+                },
                 onValueChange = { newNameText ->
                     if (!newNameText.contains("\n")) {
                         name = newNameText
@@ -241,7 +244,10 @@ fun EditBookScreen(
                 )
             ) }
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(1f),
+            modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
+            placeholder = {
+                          Text(text = "Автор книги...", color = Color.Gray)
+            },
             value = if (author != null) { author!! } else { " " },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Author") },
             onValueChange = { newAuthor ->
@@ -254,7 +260,11 @@ fun EditBookScreen(
         
         description?.let {
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
                 value = it,
+                placeholder = {
+                              Text(text = "Описание книги...", color = Color.Gray)
+                },
                 leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "info") },
                 onValueChange = { newDescriptionText ->
                     description = newDescriptionText

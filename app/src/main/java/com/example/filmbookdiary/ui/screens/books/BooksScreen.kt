@@ -52,7 +52,7 @@ fun BooksScreen(
                 var newUUID: UUID
                 coroutineScope.launch {
                     newUUID = UUID.randomUUID()
-                    bookViewModel.addBook(Book(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "New Book", "William Shakespeare", "Very cool book", null, true, "\uD83D\uDE00"))
+                    bookViewModel.addBook(Book(newUUID, Uri.parse("android.resource://com.example.filmbookdiary/" + R.drawable.empty_photo), "", "", "", null, true, "\uD83D\uDE00"))
                     navigateToSingleElement(newUUID)
                 }
             },

@@ -208,6 +208,9 @@ fun EditFilmScreen(
         name?.let {
             TextField(
                 value = it,
+                placeholder = {
+                              Text(text = "Название фильма..", color = Color.Gray)
+                },
                 onValueChange = { newNameText ->
                     if (!newNameText.contains("\n")) {
                         name = newNameText
@@ -228,8 +231,11 @@ fun EditFilmScreen(
             ) }
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(1f),
+            modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
             value = if (author != null) { author!! } else { " " },
+            placeholder = {
+                Text(text = "Режиссер...", color = Color.Gray)
+            },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Author") },
             onValueChange = { newAuthor ->
                 author = newAuthor
@@ -241,8 +247,11 @@ fun EditFilmScreen(
 
         description?.let {
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(1f),
+                modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
                 value = it,
+                placeholder = {
+                    Text(text = "Описание фильма...", color = Color.Gray)
+                },
                 leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "info") },
                 onValueChange = { newDescriptionText ->
                     description = newDescriptionText
