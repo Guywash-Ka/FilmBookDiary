@@ -7,8 +7,12 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -213,7 +217,7 @@ fun EditBookScreen(
     var description by remember { mutableStateOf(bookDescription) }
     var rating by remember { mutableStateOf(bookRating) }
     Column(
-        modifier = Modifier.fillMaxWidth(1f),
+        modifier = Modifier.fillMaxWidth(1f).background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         name?.let {
@@ -423,7 +427,7 @@ fun ShowBookScreen(
                 }
             }
 
-            if (emojiRowState.value == WidgetState.OPENED) {
+            AnimatedVisibility(visible = emojiRowState.value == WidgetState.OPENED, enter = expandVertically()) {
                 LazyRow() {
                     items(emojiList) {emoji ->
                         TextButton(

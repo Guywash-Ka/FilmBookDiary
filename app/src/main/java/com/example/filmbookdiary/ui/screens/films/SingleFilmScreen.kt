@@ -8,6 +8,8 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -204,7 +206,7 @@ fun EditFilmScreen(
     var author by remember { mutableStateOf(filmAuthor) }
     var description by remember { mutableStateOf(filmDescription) }
     var rating by remember { mutableStateOf(filmRating) }
-    Column(modifier = Modifier.fillMaxWidth(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxWidth(1f).background(color = Color.White), horizontalAlignment = Alignment.CenterHorizontally) {
         name?.let {
             TextField(
                 value = it,
@@ -413,7 +415,7 @@ fun ShowFilmScreen(
                 }
             }
 
-            if (emojiRowState.value == WidgetState.OPENED) {
+            AnimatedVisibility(visible = emojiRowState.value == WidgetState.OPENED, enter = expandVertically()) {
                 LazyRow() {
                     items(emojiList) {emoji ->
                         TextButton(

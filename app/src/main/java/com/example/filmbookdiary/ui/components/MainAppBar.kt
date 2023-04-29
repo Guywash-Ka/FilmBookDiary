@@ -1,5 +1,6 @@
 package com.example.filmbookdiary.ui.components
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
@@ -26,6 +28,7 @@ import com.example.filmbookdiary.data.FilterState
 import com.example.filmbookdiary.ui.theme.secondaryTextColor
 import com.example.filmbookdiary.ui.theme.textColor
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainAppBar(
     title: String,
@@ -40,26 +43,24 @@ fun MainAppBar(
     onFilterSelectClicked: (FilterState) -> Unit,
     onFilterTriggered: () -> Unit
 ) {
-    when (searchWidgetState) {
-        WidgetState.CLOSED -> {
-            DefaultAppBar(
-                title = title,
-                onSearchClicked = onSearchTriggered,
-                filterWidgetState = filterWidgetState,
-                filterSelectState = filterSelectState,
-                onFilterClicked = onFilterTriggered,
-                onCloseClicked = onCloseClicked,
-                onFilterSelectClicked = onFilterSelectClicked
-            )
-        }
-        WidgetState.OPENED -> {
-            SearchAppBar(
-                text = searchTextState,
-                onTextChange = onTextChange,
-                onCloseClicked = onCloseClicked,
-                onSearchClicked = onSearchClicked
-            )
-        }
+    if (searchWidgetState == WidgetState.CLOSED) {
+        DefaultAppBar(
+            title = title,
+            onSearchClicked = onSearchTriggered,
+            filterWidgetState = filterWidgetState,
+            filterSelectState = filterSelectState,
+            onFilterClicked = onFilterTriggered,
+            onCloseClicked = onCloseClicked,
+            onFilterSelectClicked = onFilterSelectClicked
+        )
+    }
+    AnimatedVisibility(visible = searchWidgetState == WidgetState.OPENED, enter = expandHorizontally(expandFrom = Alignment.Start), exit = shrinkHorizontally()) {
+        SearchAppBar(
+            text = searchTextState,
+            onTextChange = onTextChange,
+            onCloseClicked = onCloseClicked,
+            onSearchClicked = onSearchClicked
+        )
     }
 }
 
@@ -119,8 +120,11 @@ fun DefaultAppBar(
 
             }
         )
-        if (filterWidgetState == WidgetState.OPENED){
-            Row(Modifier.fillMaxWidth().background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
+        AnimatedVisibility(visible = filterWidgetState == WidgetState.OPENED, enter = expandVertically()) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = colors.background), horizontalArrangement = Arrangement.SpaceEvenly) {
                 TextButton(content = { Text("по названию", color = textColor) }, onClick = { onFilterSelectClicked(
                     FilterState.NAME) })
                 TextButton(content = { Text("по времени", color = textColor) }, onClick = { onFilterSelectClicked(
