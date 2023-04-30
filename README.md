@@ -19,6 +19,7 @@ This Android app is used for keeping notes of films and books. This is a diary, 
 * Room database
 * MVVM architecture
 * Navigation Compose
+* DI: Dagger - Hilt
 
 # Requirements
 
