@@ -35,16 +35,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
 import com.example.filmbookdiary.ui.components.SinglePicture
 import com.example.filmbookdiary.ui.theme.*
-import com.example.filmbookdiary.viewmodel.SingFilmViewModelFactory
 import com.example.filmbookdiary.viewmodel.SingleFilmViewModel
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.reflect.KFunction1
+import kotlin.reflect.KSuspendFunction1
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -52,17 +51,19 @@ fun SingleFilmScreen(
     modifier: Modifier = Modifier,
     filmID: String? = UUID.randomUUID().toString(),
     navigateBack: () -> Unit,
-    singleFilmViewModel: SingleFilmViewModel = viewModel(factory = SingFilmViewModelFactory(UUID.fromString(filmID))),
+    singleFilmViewModel: SingleFilmViewModel = hiltViewModel(),
 ) {
     val isEdited = remember { mutableStateOf(false) }
 
     var imageUri by remember {
         mutableStateOf<Uri?>(null)
     }
-
     val scope = rememberCoroutineScope()
 
-    val film = singleFilmViewModel.film.collectAsState(null).value
+    LaunchedEffect(true) {
+        singleFilmViewModel.getFilm(id = UUID.fromString(filmID))
+    }
+    val film = singleFilmViewModel.film.collectAsState().value
 
     val filmName = film?.name
     val filmImageUri = film?.imageUri
@@ -76,8 +77,10 @@ fun SingleFilmScreen(
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
         imageUri?.let {
-            singleFilmViewModel.updateFilm { oldFilm ->
-                oldFilm.copy(imageUri = imageUri!!)
+            scope.launch {
+                singleFilmViewModel.updateFilm { oldFilm ->
+                    oldFilm.copy(imageUri = imageUri!!)
+                }
             }
         }
     }
@@ -86,34 +89,34 @@ fun SingleFilmScreen(
         ModalBottomSheetValue.Hidden
     )
 
-    fun updateFilmRating(rating: Int) {
+    suspend fun updateFilmRating(rating: Int) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(rating = rating)
         }
     }
 
-    fun updateFilmIsWatched(isWatched: Boolean) {
+    suspend fun updateFilmIsWatched(isWatched: Boolean) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(isWatched = isWatched)
         }
     }
 
-    fun updateFilmEmoji(emoji: String) {
+    suspend fun updateFilmEmoji(emoji: String) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(emoji = emoji)
         }
     }
-    fun updateFilmName(name: String) {
+    suspend fun updateFilmName(name: String) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(name = name)
         }
     }
-    fun updateFilmDescription(description: String) {
+    suspend fun updateFilmDescription(description: String) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(description = description)
         }
     }
-    fun updateFilmAuthor(author: String) {
+    suspend fun updateFilmAuthor(author: String) {
         singleFilmViewModel.updateFilm { oldFilm ->
             oldFilm.copy(author = author)
         }
@@ -140,7 +143,10 @@ fun SingleFilmScreen(
                 if (isEdited.value) {
                     FloatingActionButton(
                         onClick = { launcher.launch("image/*") },
-                        modifier = modifier.align(Alignment.BottomEnd).padding(6.dp).size(26.dp))
+                        modifier = modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(6.dp)
+                            .size(26.dp))
                     {
                         Icon(Icons.Filled.Edit, contentDescription = "Change image", Modifier.size(20.dp))
                     }
@@ -153,7 +159,10 @@ fun SingleFilmScreen(
                                 }
                             }
                                   },
-                        modifier = modifier.align(Alignment.TopEnd).padding(6.dp).size(26.dp))
+                        modifier = modifier
+                            .align(Alignment.TopEnd)
+                            .padding(6.dp)
+                            .size(26.dp))
                     {
                         Icon(Icons.Filled.Clear, contentDescription = "Delete Film", Modifier.size(20.dp))
                     }
@@ -198,15 +207,19 @@ fun EditFilmScreen(
     filmRating: Int?,
     filmEmoji: String?,
     isEdited: MutableState<Boolean>,
-    updateName: KFunction1<String, Unit>,
-    updateDescription: KFunction1<String, Unit>,
-    updateAuthor: KFunction1<String, Unit>,
+    updateName: KSuspendFunction1<String, Unit>,
+    updateDescription: KSuspendFunction1<String, Unit>,
+    updateAuthor: KSuspendFunction1<String, Unit>,
 ) {
+    val scope = rememberCoroutineScope()
+
     var name by remember { mutableStateOf(filmName) }
     var author by remember { mutableStateOf(filmAuthor) }
     var description by remember { mutableStateOf(filmDescription) }
     var rating by remember { mutableStateOf(filmRating) }
-    Column(modifier = Modifier.fillMaxWidth(1f).background(color = Color.White), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier
+        .fillMaxWidth(1f)
+        .background(color = Color.White), horizontalAlignment = Alignment.CenterHorizontally) {
         name?.let {
             TextField(
                 value = it,
@@ -214,10 +227,13 @@ fun EditFilmScreen(
                               Text(text = "Название фильма..", color = Color.Gray)
                 },
                 onValueChange = { newNameText ->
-                    if (!newNameText.contains("\n")) {
-                        name = newNameText
-                        updateName(name ?: " ")
-                    } },
+                    scope.launch {
+                        if (!newNameText.contains("\n")) {
+                            name = newNameText
+                            updateName(name ?: " ")
+                        }
+                    }
+                                },
                 textStyle = TextStyle(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 30.sp,
@@ -233,15 +249,19 @@ fun EditFilmScreen(
             ) }
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(4.dp),
             value = if (author != null) { author!! } else { " " },
             placeholder = {
                 Text(text = "Режиссер...", color = Color.Gray)
             },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Author") },
             onValueChange = { newAuthor ->
-                author = newAuthor
-                updateAuthor(author ?: " ")
+                scope.launch {
+                    author = newAuthor
+                    updateAuthor(author ?: " ")
+                }
             },
             singleLine = true,
             label = { Text("Режиссер") }
@@ -249,15 +269,19 @@ fun EditFilmScreen(
 
         description?.let {
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .padding(4.dp),
                 value = it,
                 placeholder = {
                     Text(text = "Описание фильма...", color = Color.Gray)
                 },
                 leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "info") },
                 onValueChange = { newDescriptionText ->
-                    description = newDescriptionText
-                    updateDescription(description ?: "")
+                    scope.launch {
+                        description = newDescriptionText
+                        updateDescription(description ?: "")
+                    }
                 },
                 label = { Text("Описание") }
             )
@@ -283,8 +307,8 @@ fun ShowFilmScreen(
     filmEmoji: String?,
     sheetState: ModalBottomSheetState,
     isEdited: MutableState<Boolean>,
-    updateFilm: KFunction1<Boolean, Unit>,
-    updateEmoji: KFunction1<String, Unit>,
+    updateFilm: KSuspendFunction1<Boolean, Unit>,
+    updateEmoji: KSuspendFunction1<String, Unit>,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -420,8 +444,10 @@ fun ShowFilmScreen(
                     items(emojiList) {emoji ->
                         TextButton(
                             onClick = {
-                                emojiRowState.value = WidgetState.CLOSED
-                                updateEmoji(emoji)
+                                scope.launch {
+                                    emojiRowState.value = WidgetState.CLOSED
+                                    updateEmoji(emoji)
+                                }
                             },
                             modifier = modifier.padding(5.dp)
                         ) {
@@ -478,9 +504,9 @@ fun ShowFilmScreen(
 @Preview(showBackground = true)
 @Composable
 fun ShowFilmScreenPreview() {
-    fun someFun(boolArg: Boolean) {
+    suspend fun someFun(boolArg: Boolean) {
     }
-    fun someFun2(stringArg: String) {
+    suspend fun someFun2(stringArg: String) {
     }
 
     ShowFilmScreen(

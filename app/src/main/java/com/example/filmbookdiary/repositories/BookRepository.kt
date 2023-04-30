@@ -1,7 +1,5 @@
 package com.example.filmbookdiary.repositories
 
-import android.content.Context
-import androidx.room.Room
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.database.*
 import kotlinx.coroutines.CoroutineScope
@@ -10,27 +8,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-private const val DATABASE_NAME = "FBDiary_db"
-
-class BookRepository @OptIn(DelicateCoroutinesApi::class)
-private constructor(
-    context: Context,
-    private val coroutineScope: CoroutineScope = GlobalScope
+class BookRepository @Inject constructor(
+    val database: FilmBookDatabase
 ){
-    private val database: FilmBookDatabase = Room
-        .databaseBuilder(
-            context.applicationContext,
-            FilmBookDatabase::class.java,
-            DATABASE_NAME
-        )
-        .addMigrations(migration_1_2)
-        .addMigrations(migration_2_3)
-        .addMigrations(migration_3_4)
-        .addMigrations(migration_4_5)
-        .addMigrations(migration_5_6)
-        .addMigrations(migration_6_7)
-        .build()
+    @OptIn(DelicateCoroutinesApi::class)
+    private val coroutineScope: CoroutineScope = GlobalScope
 
     fun getBooks(): Flow<List<Book>> = database.bookDao().getBooks()
 
@@ -52,18 +36,4 @@ private constructor(
 
     fun getNumberOfReadBooks() = database.bookDao().getNumberOfReadBooks()
     fun getNumberOfNotReadBooks() = database.bookDao().getNumberOfNotReadBooks()
-
-    companion object {
-        private var INSTANCE: BookRepository? = null
-
-        fun initialize(context: Context) {
-            if (INSTANCE == null) {
-                INSTANCE = BookRepository(context)
-            }
-        }
-
-        fun get(): BookRepository {
-            return INSTANCE ?: throw java.lang.IllegalStateException("BookRepository must be initialized")
-        }
-    }
 }

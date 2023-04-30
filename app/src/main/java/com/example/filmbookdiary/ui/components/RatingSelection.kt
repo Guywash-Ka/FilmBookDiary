@@ -1,6 +1,5 @@
 package com.example.filmbookdiary.ui.components
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
@@ -11,23 +10,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.filmbookdiary.FilmBookDiaryApplication.Companion.maxRating
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Float.max
 import java.util.*
 import kotlin.math.absoluteValue
-import kotlin.reflect.KFunction1
+import kotlin.reflect.KSuspendFunction1
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RatingSelection(sheetState: ModalBottomSheetState, singleFilmViewModel: KFunction1<Int, Unit>) {
+fun RatingSelection(sheetState: ModalBottomSheetState, singleFilmViewModel: KSuspendFunction1<Int, Unit>) {
 
     RatingSelectionRow(sheetState, singleFilmViewModel)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RatingSelectionRow(sheetState: ModalBottomSheetState, singleFilmViewModel: KFunction1<Int, Unit>) {
+fun RatingSelectionRow(sheetState: ModalBottomSheetState, singleFilmViewModel: KSuspendFunction1<Int, Unit>) {
 
     val list = List(maxRating) { it + 1 }
     val listState = rememberLazyListState()
@@ -43,7 +41,7 @@ fun RatingSelectionRow(sheetState: ModalBottomSheetState, singleFilmViewModel: K
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun TextButtonElement(listState: LazyListState, item: Int, sheetState: ModalBottomSheetState, singleFilmViewModel: KFunction1<Int, Unit>) {
+private fun TextButtonElement(listState: LazyListState, item: Int, sheetState: ModalBottomSheetState, singleFilmViewModel: KSuspendFunction1<Int, Unit>) {
     val coroutineScope = rememberCoroutineScope()
 
     TextButton(

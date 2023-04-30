@@ -4,18 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmbookdiary.data.Book
 import com.example.filmbookdiary.data.Film
+import com.example.filmbookdiary.database.FilmDao
 import com.example.filmbookdiary.repositories.BookRepository
 import com.example.filmbookdiary.repositories.FilmRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel: ViewModel() {
-
-    private val filmRepository = FilmRepository.get()
-    private val bookRepository = BookRepository.get()
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val filmRepository: FilmRepository,
+    private val bookRepository: BookRepository
+): ViewModel() {
 
     private val _films: MutableStateFlow<List<Film>> = MutableStateFlow(emptyList())
     val films: StateFlow<List<Film>>

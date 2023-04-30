@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.data.ProfileElementData
 import com.example.filmbookdiary.ui.components.AnimatedCircle
@@ -25,7 +26,7 @@ import com.example.filmbookdiary.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    profileViewModel: ProfileViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val filmsWatchedNumber = profileViewModel.getNumberOfWatchedFilms().collectAsState(0).value
     val filmsNotWatchedNumber = profileViewModel.getNumberOfNotWatchedFilms().collectAsState(0).value

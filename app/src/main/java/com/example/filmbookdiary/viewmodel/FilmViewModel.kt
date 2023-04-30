@@ -4,17 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmbookdiary.data.Film
 import com.example.filmbookdiary.repositories.FilmRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-class FilmViewModel: ViewModel() {
-
-    private val filmRepository = FilmRepository.get()
-
+@HiltViewModel
+class FilmViewModel @Inject constructor(
+    private val filmRepository: FilmRepository
+): ViewModel() {
     private val _films: MutableStateFlow<List<Film>> = MutableStateFlow(emptyList())
     val films: StateFlow<List<Film>>
     get() = _films.asStateFlow()

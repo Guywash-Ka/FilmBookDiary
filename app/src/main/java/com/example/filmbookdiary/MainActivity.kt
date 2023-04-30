@@ -18,8 +18,10 @@ import com.example.filmbookdiary.ui.components.DiaryTabRow
 import com.example.filmbookdiary.ui.components.MainAppBar
 import com.example.filmbookdiary.ui.theme.FilmBookDiaryTheme
 import com.example.filmbookdiary.viewmodel.TopBarViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val topBarViewModel: TopBarViewModel by viewModels()

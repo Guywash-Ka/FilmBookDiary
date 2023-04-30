@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.filmbookdiary.R
 import com.example.filmbookdiary.data.Film
@@ -21,7 +22,7 @@ import java.util.*
 @Composable
 fun FilmsScreen(
     modifier: Modifier = Modifier,
-    filmViewModel: FilmViewModel = viewModel(),
+    filmViewModel: FilmViewModel = hiltViewModel(),
     navigateToSingleFilm: (UUID) -> Unit = {},
     searchTextState: String,
     filterSelectState: FilterState

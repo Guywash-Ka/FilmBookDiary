@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
@@ -35,18 +34,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.filmbookdiary.data.WidgetState
 import com.example.filmbookdiary.ui.components.RatingSelection
 import com.example.filmbookdiary.ui.components.SinglePicture
 import com.example.filmbookdiary.ui.theme.backgroundColor
 import com.example.filmbookdiary.ui.theme.secondaryTextColor
 import com.example.filmbookdiary.ui.theme.textColor
-import com.example.filmbookdiary.viewmodel.SingBookViewModelFactory
 import com.example.filmbookdiary.viewmodel.SingleBookViewModel
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.reflect.KFunction1
+import kotlin.reflect.KSuspendFunction1
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -54,7 +52,7 @@ fun SingleBookScreen(
     modifier: Modifier = Modifier,
     bookID: String? = UUID.randomUUID().toString(),
     navigateBack: () -> Unit,
-    singleBookViewModel: SingleBookViewModel = viewModel(factory = SingBookViewModelFactory(UUID.fromString(bookID))),
+    singleBookViewModel: SingleBookViewModel = hiltViewModel(),
 ) {
     val isEdited = remember { mutableStateOf(false) }
 
@@ -64,7 +62,10 @@ fun SingleBookScreen(
 
     val scope = rememberCoroutineScope()
 
-    val book = singleBookViewModel.book.collectAsState(null).value
+    LaunchedEffect(true) {
+        singleBookViewModel.getBook(id = UUID.fromString(bookID))
+    }
+    val book = singleBookViewModel.book.collectAsState().value
 
     val bookName = book?.name
     val bookAuthor = book?.author
@@ -78,8 +79,10 @@ fun SingleBookScreen(
     ActivityResultContracts.GetContent()) { uri: Uri? ->
         imageUri = uri
         imageUri?.let {
-            singleBookViewModel.updateBook { oldBook ->
-                oldBook.copy(imageUri = imageUri!!)
+            scope.launch {
+                singleBookViewModel.updateBook { oldBook ->
+                    oldBook.copy(imageUri = imageUri!!)
+                }
             }
         }
     }
@@ -88,37 +91,37 @@ fun SingleBookScreen(
         ModalBottomSheetValue.Hidden
     )
 
-    fun updateBookRating(rating: Int) {
+    suspend fun updateBookRating(rating: Int) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(rating = rating)
         }
     }
 
-    fun updateBookIsRead(isRead: Boolean) {
+    suspend fun updateBookIsRead(isRead: Boolean) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(isRead = isRead)
         }
     }
 
-    fun updateBookEmoji(emoji: String) {
+    suspend fun updateBookEmoji(emoji: String) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(emoji = emoji)
         }
     }
 
-    fun updateBookName(name: String) {
+    suspend fun updateBookName(name: String) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(name = name)
         }
     }
 
-    fun updateBookDescription(description: String) {
+    suspend fun updateBookDescription(description: String) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(description = description)
         }
     }
 
-    fun updateBookAuthor(author: String) {
+    suspend fun updateBookAuthor(author: String) {
         singleBookViewModel.updateBook { oldBook ->
             oldBook.copy(author = author)
         }
@@ -208,16 +211,20 @@ fun EditBookScreen(
     bookRating: Int?,
     bookEmoji: String?,
     isEdited: MutableState<Boolean>,
-    updateName: KFunction1<String, Unit>,
-    updateDescription: KFunction1<String, Unit>,
-    updateAuthor: KFunction1<String, Unit>,
+    updateName: KSuspendFunction1<String, Unit>,
+    updateDescription: KSuspendFunction1<String, Unit>,
+    updateAuthor: KSuspendFunction1<String, Unit>,
 ) {
+    val scope = rememberCoroutineScope()
+
     var name by remember { mutableStateOf(bookName) }
     var author by remember { mutableStateOf(bookAuthor) }
     var description by remember { mutableStateOf(bookDescription) }
     var rating by remember { mutableStateOf(bookRating) }
     Column(
-        modifier = Modifier.fillMaxWidth(1f).background(color = Color.White),
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         name?.let {
@@ -227,10 +234,13 @@ fun EditBookScreen(
                     Text(text = "Название книги..", color = Color.Gray)
                 },
                 onValueChange = { newNameText ->
-                    if (!newNameText.contains("\n")) {
-                        name = newNameText
-                        updateName(name ?: " ")
-                    } },
+                    scope.launch {
+                        if (!newNameText.contains("\n")) {
+                            name = newNameText
+                            updateName(name ?: " ")
+                        }
+                    }
+                                },
                 textStyle = TextStyle(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 30.sp,
@@ -245,15 +255,19 @@ fun EditBookScreen(
                 )
             ) }
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .padding(4.dp),
             placeholder = {
                           Text(text = "Автор книги...", color = Color.Gray)
             },
             value = if (author != null) { author!! } else { " " },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Author") },
             onValueChange = { newAuthor ->
-                author = newAuthor
-                updateAuthor(author ?: " ")
+                scope.launch {
+                    author = newAuthor
+                    updateAuthor(author ?: " ")
+                }
             },
             singleLine = true,
             label = { Text("Автор") }
@@ -261,15 +275,19 @@ fun EditBookScreen(
         
         description?.let {
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(1f).padding(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .padding(4.dp),
                 value = it,
                 placeholder = {
                               Text(text = "Описание книги...", color = Color.Gray)
                 },
                 leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "info") },
                 onValueChange = { newDescriptionText ->
-                    description = newDescriptionText
-                    updateDescription(description ?: " ")
+                    scope.launch {
+                        description = newDescriptionText
+                        updateDescription(description ?: " ")
+                    }
                 },
                 label = { Text("Описание") }
             ) }
@@ -294,8 +312,8 @@ fun ShowBookScreen(
     bookEmoji: String?,
     sheetState: ModalBottomSheetState,
     isEdited: MutableState<Boolean>,
-    updateIsRead: KFunction1<Boolean, Unit>,
-    updateEmoji: KFunction1<String, Unit>,
+    updateIsRead: KSuspendFunction1<Boolean, Unit>,
+    updateEmoji: KSuspendFunction1<String, Unit>,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -432,8 +450,10 @@ fun ShowBookScreen(
                     items(emojiList) {emoji ->
                         TextButton(
                             onClick = {
-                                emojiRowState.value = WidgetState.CLOSED
-                                updateEmoji(emoji)
+                                scope.launch {
+                                    emojiRowState.value = WidgetState.CLOSED
+                                    updateEmoji(emoji)
+                                }
                             },
                             modifier = modifier.padding(5.dp)
                         ) {
@@ -490,9 +510,9 @@ fun ShowBookScreen(
 @Preview(showBackground = true)
 @Composable
 fun ShowBookScreenPreview() {
-    fun someFun(boolArg: Boolean) {
+    suspend fun someFun(boolArg: Boolean) {
     }
-    fun someFun2(stringArg: String) {
+    suspend fun someFun2(stringArg: String) {
     }
 
     ShowBookScreen(
