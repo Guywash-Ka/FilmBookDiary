@@ -1,7 +1,8 @@
 # Fibo
 Main branch status
 
-![master](https://github.com/Guywash-Ka/FilmBookDiary/workflows/FBTest_CI.yml/badge.svg)
+![master](https://github.com/Guywash-Ka/FilmBookDiary/actions/workflows/FBTest_CI.yml/badge.svg)
+# 
 This Android app is used for keeping notes of films and books. This is a diary, where you can add notes of any films and books, review and rate them.
 
 
